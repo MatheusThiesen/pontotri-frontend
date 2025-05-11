@@ -47,6 +47,7 @@ export function SideNavigation({ className }: SideNavigationProps) {
       <nav className="flex-1 p-4">
         <ul className="space-y-2">
           {menuItems
+
             .filter((f) => !f.isOnlyBottomNavigation)
             .map((item) => {
               const isActive = pathname === item.href;

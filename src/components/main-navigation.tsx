@@ -7,11 +7,15 @@ import { SideNavigation } from "@/components/side-navigation";
 import { useScreenSize } from "@/hooks/use-screen-size";
 import { cn } from "@/lib/utils";
 import {
+  BarChart3,
+  Building2,
+  CalendarClock,
   CircleCheckBig,
   ClockFading,
   Home,
   ScanFace,
   User,
+  Users,
 } from "lucide-react";
 
 interface MainNavigationProps {
@@ -25,6 +29,7 @@ type MenuItemProps = {
   isNew?: boolean;
   icon: any;
   isOnlyBottomNavigation?: boolean;
+  isOnlySideNavigation?: boolean;
 };
 
 export const menuItems: MenuItemProps[] = [
@@ -54,6 +59,30 @@ export const menuItems: MenuItemProps[] = [
     label: "Perfil",
     href: "/profile",
     isOnlyBottomNavigation: true,
+  },
+  {
+    icon: Users,
+    label: "Colaboradores",
+    href: "/employees",
+    isOnlySideNavigation: true,
+  },
+  {
+    icon: CalendarClock,
+    label: "Jornadas",
+    href: "/work-schedules",
+    isOnlySideNavigation: true,
+  },
+  {
+    icon: Building2,
+    label: "Setores",
+    href: "/departments",
+    isOnlySideNavigation: true,
+  },
+  {
+    icon: BarChart3,
+    label: "Relatórios",
+    href: "/reports",
+    isOnlySideNavigation: true,
   },
 ];
 
