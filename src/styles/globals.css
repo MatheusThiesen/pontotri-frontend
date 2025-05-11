@@ -120,3 +120,11 @@
     @apply bg-background text-foreground;
   }
 }
+
+body {
+  /* overflow: hidden !important; */
+
+  button:hover {
+    cursor: pointer;
+  }
+}
