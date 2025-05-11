@@ -1,3 +1,4 @@
+import { PricingSection } from "@/components/pricing-section";
 import { Button } from "@/components/ui/button";
 import { BarChart3, Calendar, ChevronRight, MapPin, Scan } from "lucide-react";
 import Link from "next/link";
@@ -129,6 +130,8 @@ export default function LandingPage() {
           </Button>
         </div>
       </section>
+
+      <PricingSection />
 
       {/* Rodapé */}
       <footer className="border-t border-gray-200 bg-white py-12 flex justify-center">

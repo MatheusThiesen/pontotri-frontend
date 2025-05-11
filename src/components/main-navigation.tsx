@@ -14,6 +14,7 @@ import {
   ClockFading,
   Home,
   ScanFace,
+  Settings,
   User,
   Users,
 } from "lucide-react";
@@ -82,6 +83,12 @@ export const menuItems: MenuItemProps[] = [
     icon: BarChart3,
     label: "Relatórios",
     href: "/reports",
+    isOnlySideNavigation: true,
+  },
+  {
+    icon: Settings,
+    label: "Configurações",
+    href: "/settings",
     isOnlySideNavigation: true,
   },
 ];
