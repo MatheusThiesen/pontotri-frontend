@@ -15,7 +15,7 @@ export function LocationDisplay() {
 
   useEffect(() => {
     if (!navigator.geolocation) {
-      setError("Geolocation is not supported by your browser");
+      setError("Geolocalização não é suportada pelo seu navegador");
       setLoading(false);
       return;
     }
@@ -35,8 +35,10 @@ export function LocationDisplay() {
     };
 
     const errorHandler = (err: GeolocationPositionError) => {
-      console.error("Error getting location:", err);
-      setError("Unable to retrieve your location. Please check permissions.");
+      console.error("Erro ao obter localização:", err);
+      setError(
+        "Não foi possível obter sua localização. Verifique as permissões."
+      );
       setLoading(false);
     };
 
@@ -55,7 +57,7 @@ export function LocationDisplay() {
     <div className="mt-4 p-3 bg-gray-50 rounded-lg border border-gray-200">
       <div className="flex items-center mb-2">
         <MapPin className="h-4 w-4 text-teal-600 mr-1" />
-        <h3 className="text-sm font-medium">Current Location</h3>
+        <h3 className="text-sm font-medium">Localização Atual</h3>
       </div>
 
       {loading ? (

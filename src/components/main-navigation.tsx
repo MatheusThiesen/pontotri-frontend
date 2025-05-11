@@ -36,12 +36,12 @@ export const menuItems: MenuItemProps[] = [
   {
     icon: ClockFading,
     label: "Registros",
-    href: "/records",
+    href: "/registers",
   },
   {
     icon: ScanFace,
     label: "Registro ponto",
-    href: "/register",
+    href: "/check-in",
     isPrincipal: true,
   },
   {

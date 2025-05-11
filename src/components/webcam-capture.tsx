@@ -19,17 +19,17 @@ export function WebcamCapture({ onCapture, isCapturing }: WebcamCaptureProps) {
 
   useEffect(() => {
     if (isCapturing) {
-      startCamera();
+      iniciarCamera();
     } else {
-      stopCamera();
+      pararCamera();
     }
 
     return () => {
-      stopCamera();
+      pararCamera();
     };
   }, [isCapturing]);
 
-  const startCamera = async () => {
+  const iniciarCamera = async () => {
     setCameraError(null);
     try {
       const mediaStream = await navigator.mediaDevices.getUserMedia({
@@ -43,12 +43,14 @@ export function WebcamCapture({ onCapture, isCapturing }: WebcamCaptureProps) {
 
       setStream(mediaStream);
     } catch (err) {
-      console.error("Error accessing camera:", err);
-      setCameraError("Unable to access camera. Please check permissions.");
+      console.error("Erro ao acessar a câmera:", err);
+      setCameraError(
+        "Não foi possível acessar a câmera. Verifique as permissões."
+      );
     }
   };
 
-  const stopCamera = () => {
+  const pararCamera = () => {
     if (stream) {
       stream.getTracks().forEach((track) => track.stop());
       setStream(null);
@@ -59,14 +61,14 @@ export function WebcamCapture({ onCapture, isCapturing }: WebcamCaptureProps) {
     }
   };
 
-  const capturePhoto = () => {
+  const capturarFoto = () => {
     setCountdown(3);
 
-    const countdownInterval = setInterval(() => {
+    const contadorInterval = setInterval(() => {
       setCountdown((prev) => {
         if (prev === 1) {
-          clearInterval(countdownInterval);
-          takeSnapshot();
+          clearInterval(contadorInterval);
+          tirarFoto();
           return null;
         }
         return prev ? prev - 1 : null;
@@ -74,7 +76,7 @@ export function WebcamCapture({ onCapture, isCapturing }: WebcamCaptureProps) {
     }, 1000);
   };
 
-  const takeSnapshot = () => {
+  const tirarFoto = () => {
     if (videoRef.current && canvasRef.current) {
       const video = videoRef.current;
       const canvas = canvasRef.current;
@@ -96,7 +98,7 @@ export function WebcamCapture({ onCapture, isCapturing }: WebcamCaptureProps) {
       <div className="w-full h-full flex items-center justify-center">
         <Alert variant="destructive" className="max-w-xs">
           <AlertCircle className="h-4 w-4" />
-          <AlertTitle>Error</AlertTitle>
+          <AlertTitle>Erro</AlertTitle>
           <AlertDescription>{cameraError}</AlertDescription>
         </Alert>
       </div>
@@ -128,14 +130,14 @@ export function WebcamCapture({ onCapture, isCapturing }: WebcamCaptureProps) {
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
           <div className="absolute bottom-0 left-0 right-0 p-4 text-center text-white">
             <p className="text-lg font-medium mb-4">
-              Smile and get ready to clock in!
+              Sorria e prepare-se para bater o ponto!
             </p>
             <Button
-              onClick={capturePhoto}
+              onClick={capturarFoto}
               className="bg-white text-black hover:bg-white/90"
             >
               <Camera className="mr-2 h-4 w-4" />
-              Take Photo
+              Tirar Foto
             </Button>
           </div>
         </div>

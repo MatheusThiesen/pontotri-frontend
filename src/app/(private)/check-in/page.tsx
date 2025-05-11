@@ -111,7 +111,8 @@ export default function CheckInPage() {
         <CardFooter className="flex flex-col gap-4 border-t pt-4">
           {!capturedImage && !checkInSuccess && (
             <Button
-              className="w-full bg-teal-600 hover:bg-teal-700"
+              className="w-full"
+              size="lg"
               onClick={() => setIsCapturing(true)}
             >
               <Camera className="mr-2 h-4 w-4" />
@@ -121,6 +122,7 @@ export default function CheckInPage() {
 
           <Button
             className="w-full bg-gradient-to-r from-teal-500 to-blue-500 hover:from-teal-600 hover:to-blue-600"
+            size="lg"
             onClick={handleRegisterTime}
             disabled={isSubmitting || checkInSuccess}
           >

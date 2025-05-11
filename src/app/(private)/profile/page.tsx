@@ -27,6 +27,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Camera, Edit, Key, User } from "lucide-react";
+import Link from "next/link";
 import { useState } from "react";
 
 export default function ProfilePage() {
@@ -239,9 +240,11 @@ export default function ProfilePage() {
           </div>
         </CardContent>
         <CardFooter>
-          <Button variant="outline" className="w-full">
-            Ver todas as atividades
-          </Button>
+          <Link href="registers" className="w-full">
+            <Button variant="outline" className="w-full">
+              Ver todas as atividades
+            </Button>
+          </Link>
         </CardFooter>
       </Card>
 

@@ -109,7 +109,7 @@ export function SideNavigation({ className }: SideNavigationProps) {
                 className="flex cursor-pointer items-center"
               >
                 <User className="mr-2 h-4 w-4" />
-                <span>Profile</span>
+                <span>Perfil</span>
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem
@@ -117,7 +117,7 @@ export function SideNavigation({ className }: SideNavigationProps) {
               onClick={() => {}}
             >
               <LogOut className="mr-2 h-4 w-4" />
-              <span>Exit</span>
+              <span>Sair</span>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

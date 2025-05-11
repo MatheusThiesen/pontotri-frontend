@@ -1,6 +1,7 @@
 "use client";
 
 import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
 import { useEffect, useState } from "react";
 
 export function TimeDisplay() {
@@ -22,7 +23,7 @@ export function TimeDisplay() {
         {format(currentTime, "HH:mm:ss")}
       </div>
       <div className="text-sm text-gray-500 mt-1">
-        {format(currentTime, "EEEE, MMMM d, yyyy")}
+        {format(currentTime, "EEEE, dd 'de' MMMM 'de' yyyy", { locale: ptBR })}
       </div>
     </div>
   );
