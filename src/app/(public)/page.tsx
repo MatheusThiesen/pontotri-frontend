@@ -117,8 +117,8 @@ export default function LandingPage() {
             Pronto para simplificar o controle de ponto?
           </h2>
           <p className="mx-auto mb-8 max-w-2xl text-lg text-white/90">
-            Experimente uma nova forma de controlar o ponto com tecnologia
-            moderna e confiável.
+            Comece agora a transformar a gestão de ponto da sua empresa com o
+            PontoTRI.
           </p>
           <Button
             size="lg"
