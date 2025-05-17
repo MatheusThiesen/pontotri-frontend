@@ -121,13 +121,15 @@ export default function LandingPage() {
             Comece agora a transformar a gestão de ponto da sua empresa com o
             PontoTRI.
           </p>
-          <Button
-            size="lg"
-            variant="secondary"
-            className="h-12 rounded-full px-8 text-base font-medium"
-          >
-            Comece agora
-          </Button>
+          <Link href="sign-up" passHref>
+            <Button
+              size="lg"
+              variant="secondary"
+              className="h-12 rounded-full px-8 text-base font-medium"
+            >
+              Comece agora
+            </Button>
+          </Link>
         </div>
       </section>
 

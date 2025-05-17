@@ -50,7 +50,7 @@ export default function CheckInPage() {
 
   return (
     <DetailPage className="flex justify-center">
-      <Card className="w-full max-w-md shadow-lg">
+      <Card className="w-full max-w-2xl shadow-lg">
         <CardHeader className="text-center border-b pb-4">
           <div className="flex items-center justify-center mb-2">
             <Clock className="h-6 w-6 text-teal-600 mr-2" />

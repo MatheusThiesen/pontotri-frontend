@@ -86,7 +86,7 @@ export function SideNavigation({ className }: SideNavigationProps) {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <button className="flex w-full items-center gap-3 rounded-md px-3 py-2 text-left hover:bg-muted">
-              <Avatar className="h-8 w-8">
+              <Avatar className="size-9 border-2 border-primary">
                 <AvatarImage
                   src={user?.avatarUrl || ""}
                   alt={user?.name || "User"}

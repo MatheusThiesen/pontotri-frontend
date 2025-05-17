@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import {
   ColumnDef,
@@ -7,10 +7,10 @@ import {
   getCoreRowModel,
   getPaginationRowModel,
   useReactTable,
-} from "@tanstack/react-table"
-import { motion } from "framer-motion"
-import { LoaderCircle } from "lucide-react"
-import * as React from "react"
+} from "@tanstack/react-table";
+import { motion } from "framer-motion";
+import { LoaderCircle } from "lucide-react";
+import * as React from "react";
 
 import {
   Table,
@@ -19,29 +19,29 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
-import { cn } from "@/lib/utils"
-import { Suspense } from "react"
-import { Alert, AlertTitle } from "../ui/alert"
-import { DataTablePagination } from "./data-table-pagination"
-import { DataTableToolbar } from "./data-table-toolbar"
-import { DataTableOrderbyProps } from "./data-tablet-orderby"
+} from "@/components/ui/table";
+import { cn } from "@/lib/utils";
+import { Suspense } from "react";
+import { Alert, AlertTitle } from "../ui/alert";
+import { DataTablePagination } from "./data-table-pagination";
+import { DataTableToolbar } from "./data-table-toolbar";
+import { DataTableOrderbyProps } from "./data-tablet-orderby";
 
 interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[]
-  data: TData[]
+  columns: ColumnDef<TData, TValue>[];
+  data: TData[];
 
-  pagination: PaginationState
-  setPagination: React.Dispatch<React.SetStateAction<PaginationState>>
-  total: number
+  pagination: PaginationState;
+  setPagination: React.Dispatch<React.SetStateAction<PaginationState>>;
+  total: number;
 
-  onReload?: () => void
-  onClickRow?: (data: TData) => void
-  isLoading?: boolean
-  disableSearch?: boolean
+  onReload?: () => void;
+  onClickRow?: (data: TData) => void;
+  isLoading?: boolean;
+  disableSearch?: boolean;
 
-  orderby?: DataTableOrderbyProps
-  formFilter?: React.ReactNode
+  orderby?: DataTableOrderbyProps;
+  formFilter?: React.ReactNode;
 }
 
 export function DataTable<TData, TValue>({
@@ -68,13 +68,13 @@ export function DataTable<TData, TValue>({
     manualPagination: true,
     pageCount: Math.ceil(total / pagination.pageSize),
     onPaginationChange: (updater: any) => {
-      const updated = updater(pagination)
+      const updated = updater(pagination);
 
       if (updated) {
-        setPagination(updated)
+        setPagination(updated);
       }
     },
-  })
+  });
 
   return (
     <div className="space-y-4">
@@ -113,10 +113,10 @@ export function DataTable<TData, TValue>({
                         ? null
                         : flexRender(
                             header.column.columnDef.header,
-                            header.getContext(),
+                            header.getContext()
                           )}
                     </TableHead>
-                  )
+                  );
                 })}
               </TableRow>
             ))}
@@ -129,7 +129,7 @@ export function DataTable<TData, TValue>({
                   data-state={row.getIsSelected() && "selected"}
                   onClick={() => {
                     if (onClickRow) {
-                      onClickRow(row.original)
+                      onClickRow(row.original);
                     }
                   }}
                   className={cn(onClickRow ? "cursor-pointer" : "")}
@@ -138,7 +138,7 @@ export function DataTable<TData, TValue>({
                     <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext(),
+                        cell.getContext()
                       )}
                     </TableCell>
                   ))}
@@ -157,7 +157,9 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      <DataTablePagination table={table} />
+      <Suspense>
+        <DataTablePagination table={table} />
+      </Suspense>
     </div>
-  )
+  );
 }

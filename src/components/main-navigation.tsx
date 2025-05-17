@@ -99,10 +99,10 @@ export function MainNavigation({ children }: MainNavigationProps) {
   return (
     <div className="min-h-screen">
       <div className="lg:hidden">
-        <div className="flex items-center justify-center  border-b border-gray-200 bg-white px-4 py-4">
+        <div className="flex items-center justify-center border-b border-gray-200  px-4 py-4 bg-[#1b1917] ">
           <div className="flex items-center">
             <img src="/assets/logo-short.png" alt="logo" className="h-7 mr-2" />
-            <span className="text-lg font-bold">
+            <span className="text-lg font-bold text-white">
               Ponto<span className="text-primary">TRI</span>
             </span>
           </div>

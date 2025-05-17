@@ -10,13 +10,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { Check, HelpCircle } from "lucide-react";
+import { Check } from "lucide-react";
+import Link from "next/link";
 
 const plans = [
   {
@@ -26,13 +21,16 @@ const plans = [
     priceDescription: "/mês",
     features: [
       "Até 3 usuários",
-      "Check-in por GPS e facial",
-      "Relatórios básicos",
+      "Check-in facial + GPS",
+      "Relatórios",
+      "Exportação de dados",
+      "Controle de horas extras",
       "Suporte por email",
     ],
     buttonText: "Começar gratuitamente",
     buttonVariant: "outline" as const,
     isPopular: false,
+    href: "sign-up",
   },
   {
     name: "Essencial",
@@ -41,14 +39,16 @@ const plans = [
     priceDescription: "/mês",
     features: [
       "Até 10 usuários",
-      "Rastreamento de localização",
-      "Relatórios mensais",
+      "Check-in facial + GPS",
+      "Relatórios",
       "Exportação de dados",
+      "Controle de horas extras",
       "Suporte prioritário",
     ],
     buttonText: "Assinar plano",
     buttonVariant: "default" as const,
     isPopular: false,
+    href: "sign-up",
   },
   {
     name: "Profissional",
@@ -58,14 +58,32 @@ const plans = [
     features: [
       "Até 50 usuários",
       "Check-in facial + GPS",
-      "Relatórios avançados",
-      "Integrações com outros sistemas",
+      "Relatórios",
       "Controle de horas extras",
-      "Suporte prioritário 24/7",
+      "Suporte prioritário",
     ],
     buttonText: "Assinar plano",
     buttonVariant: "default" as const,
     isPopular: true,
+    href: "sign-up",
+  },
+  {
+    name: "Empresarial",
+    description:
+      "Para médias e grandes empresas que precisam escalar o controle de ponto",
+    price: "R$ 299,90",
+    priceDescription: "/mês",
+    features: [
+      "Até 100 usuários",
+      "Check-in facial + GPS",
+      "Relatórios",
+      "Controle de horas extras",
+      "Suporte prioritário",
+    ],
+    buttonText: "Assinar plano",
+    buttonVariant: "default" as const,
+    isPopular: false,
+    href: "sign-up",
   },
   // {
   //   name: "Empresarial",
@@ -143,22 +161,24 @@ export function PricingSection() {
                 </ul>
               </CardContent>
               <CardFooter className="pt-6">
-                <Button
-                  variant={plan.buttonVariant}
-                  className={`w-full ${
-                    plan.isPopular
-                      ? "bg-gradient-to-r from-teal-500 to-blue-500 hover:from-teal-600 hover:to-blue-600"
-                      : ""
-                  }`}
-                >
-                  {plan.buttonText}
-                </Button>
+                <Link className="w-full" href={plan.href}>
+                  <Button
+                    variant={plan.buttonVariant}
+                    className={`w-full ${
+                      plan.isPopular
+                        ? "bg-gradient-to-r from-teal-500 to-blue-500 hover:from-teal-600 hover:to-blue-600"
+                        : ""
+                    }`}
+                  >
+                    {plan.buttonText}
+                  </Button>
+                </Link>
               </CardFooter>
             </Card>
           ))}
         </div>
 
-        <div className="mt-12 text-center">
+        {/* <div className="mt-12 text-center">
           <div className="inline-flex items-center rounded-full border px-4 py-2">
             <span className="text-sm">Precisa de ajuda para escolher?</span>
             <TooltipProvider>
@@ -184,7 +204,7 @@ export function PricingSection() {
               Agendar demonstração
             </Button>
           </div>
-        </div>
+        </div> */}
       </div>
     </section>
   );
