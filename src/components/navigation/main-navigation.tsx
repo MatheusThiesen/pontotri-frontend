@@ -36,82 +36,101 @@ type MenuItemProps = {
   roles: Role[];
 };
 
-export const menuItems: MenuItemProps[] = [
+type GroupedMenuItemProps = {
+  title: string;
+  items: MenuItemProps[];
+};
+
+export const groupedMenusItems: GroupedMenuItemProps[] = [
   {
-    icon: Home,
-    label: "Início",
-    href: "/home",
-    roles: ["ADMIN", "OWNER", "MANAGER", "EMPLOYEE"],
+    title: "",
+    items: [
+      {
+        icon: Home,
+        label: "Início",
+        href: "/home",
+        roles: ["ADMIN", "OWNER", "MANAGER", "EMPLOYEE"],
+      },
+      {
+        icon: ClockFading,
+        label: "Registros",
+        href: "/registers",
+        roles: ["ADMIN", "OWNER", "MANAGER", "EMPLOYEE"],
+      },
+      {
+        icon: ScanFace,
+        label: "Registro ponto",
+        href: "/check-in",
+        isPrincipal: true,
+        roles: ["ADMIN", "OWNER", "MANAGER", "EMPLOYEE"],
+      },
+      {
+        icon: CircleCheckBig,
+        label: "Pedidos",
+        href: "/requests",
+        roles: ["ADMIN", "OWNER", "MANAGER", "EMPLOYEE"],
+      },
+      {
+        icon: BarChart3,
+        label: "Relatórios",
+        href: "/reports",
+        isOnlySideNavigation: true,
+        roles: ["ADMIN", "OWNER", "MANAGER"],
+      },
+    ],
   },
+
   {
-    icon: ClockFading,
-    label: "Registros",
-    href: "/registers",
-    roles: ["ADMIN", "OWNER", "MANAGER", "EMPLOYEE"],
-  },
-  {
-    icon: ScanFace,
-    label: "Registro ponto",
-    href: "/check-in",
-    isPrincipal: true,
-    roles: ["ADMIN", "OWNER", "MANAGER", "EMPLOYEE"],
-  },
-  {
-    icon: CircleCheckBig,
-    label: "Pedidos",
-    href: "/requests",
-    roles: ["ADMIN", "OWNER", "MANAGER", "EMPLOYEE"],
-  },
-  {
-    icon: User,
-    label: "Perfil",
-    href: "/profile",
-    isOnlyBottomNavigation: true,
-    roles: ["ADMIN", "OWNER", "MANAGER", "EMPLOYEE"],
-  },
-  {
-    icon: Users,
-    label: "Colaboradores",
-    href: "/users",
-    isOnlySideNavigation: true,
-    roles: ["ADMIN", "OWNER", "MANAGER"],
-  },
-  {
-    icon: CalendarClock,
-    label: "Jornadas",
-    href: "/work-schedules",
-    isOnlySideNavigation: true,
-    roles: ["ADMIN", "OWNER"],
-  },
-  {
-    icon: Building2,
-    label: "Departamentos",
-    href: "/departments",
-    isOnlySideNavigation: true,
-    roles: ["ADMIN", "OWNER"],
-  },
-  {
-    icon: MapPin,
-    label: "Localizações",
-    href: "/locations",
-    isOnlySideNavigation: true,
-    roles: ["ADMIN", "OWNER"],
-  },
-  {
-    icon: BarChart3,
-    label: "Relatórios",
-    href: "/reports",
-    isOnlySideNavigation: true,
-    roles: ["ADMIN", "OWNER", "MANAGER"],
-  },
-  {
-    icon: Settings,
-    label: "Configurações",
-    href: "/settings",
-    isOnlySideNavigation: true,
-    roles: ["ADMIN", "OWNER"],
+    title: "Administração",
+    items: [
+      {
+        icon: User,
+        label: "Perfil",
+        href: "/profile",
+        isOnlyBottomNavigation: true,
+        roles: ["ADMIN", "OWNER", "MANAGER", "EMPLOYEE"],
+      },
+      {
+        icon: Users,
+        label: "Colaboradores",
+        href: "/users",
+        isOnlySideNavigation: true,
+        roles: ["ADMIN", "OWNER", "MANAGER"],
+      },
+      {
+        icon: CalendarClock,
+        label: "Jornadas",
+        href: "/work-schedules",
+        isOnlySideNavigation: true,
+        roles: ["ADMIN", "OWNER"],
+      },
+      {
+        icon: Building2,
+        label: "Departamentos",
+        href: "/departments",
+        isOnlySideNavigation: true,
+        roles: ["ADMIN", "OWNER"],
+      },
+      {
+        icon: MapPin,
+        label: "Localizações",
+        href: "/locations",
+        isOnlySideNavigation: true,
+        roles: ["ADMIN", "OWNER"],
+      },
+
+      {
+        icon: Settings,
+        label: "Configurações",
+        href: "/settings",
+        isOnlySideNavigation: true,
+        roles: ["ADMIN", "OWNER"],
+      },
+    ],
   },
 ];
+
+export const menuItems = groupedMenusItems.map((group) => group.items).flat();
 
 export function MainNavigation({ children }: MainNavigationProps) {
   const { isLargeScreen } = useScreenSize();

@@ -24,6 +24,9 @@ export function TableListRequests() {
       onClickRow={(row) => router.push(`/clientes/${row.id}`)}
       onReload={() => {}}
       isLoading={false}
+      onAdd={() => {
+        router.push("/work-schedules/create");
+      }}
     />
   );
 }

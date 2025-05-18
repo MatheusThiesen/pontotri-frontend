@@ -1,7 +1,7 @@
 "use client";
 
+import { api } from "@/lib/services/api";
 import { TOKEN_LABEL_AUTH, TOKEN_LABEL_REFRESH } from "@/middleware";
-import { api } from "@/services/api";
 import nookies, { parseCookies } from "nookies";
 import {
   ReactNode,
