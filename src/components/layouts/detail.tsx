@@ -45,7 +45,7 @@ interface DetailTitle {
 }
 export const DetailTitle = ({ children, className }: DetailTitle) => {
   return (
-    <h1 className={cn("text-2xl font-semibold text-gray-900", className)}>
+    <h1 className={cn("text-3xl font-semibold text-gray-900", className)}>
       {children}
     </h1>
   );

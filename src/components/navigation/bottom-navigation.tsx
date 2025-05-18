@@ -1,5 +1,6 @@
 "use client";
 
+import { useAuth } from "@/contexts/AuthProvider";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -10,6 +11,7 @@ interface BottomNavigationProps {
 }
 
 export function BottomNavigation({ className }: BottomNavigationProps) {
+  const { me } = useAuth();
   const pathname = usePathname();
 
   return (
@@ -22,7 +24,7 @@ export function BottomNavigation({ className }: BottomNavigationProps) {
       <div className="mx-auto flex h-16 max-w-md items-center justify-around px-4">
         {menuItems
           .filter((f) => !f.isOnlySideNavigation)
-
+          .filter((f) => f.roles.includes(me.role))
           .map((item) => {
             const isActive = pathname === item.href;
             return (

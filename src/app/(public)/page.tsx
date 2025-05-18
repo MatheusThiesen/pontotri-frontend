@@ -1,4 +1,4 @@
-import { PricingSection } from "@/components/pricing-section";
+import { PricingSection } from "@/app/(public)/_components/pricing-section";
 import { Button } from "@/components/ui/button";
 import { BarChart3, Calendar, ChevronRight, MapPin, Scan } from "lucide-react";
 import Link from "next/link";

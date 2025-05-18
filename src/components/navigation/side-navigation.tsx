@@ -7,6 +7,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useAuth } from "@/contexts/AuthProvider";
 import { cn } from "@/lib/utils";
 import { LogOut, User } from "lucide-react";
 import Link from "next/link";
@@ -18,11 +19,13 @@ interface SideNavigationProps {
 }
 
 export function SideNavigation({ className }: SideNavigationProps) {
+  const { me, signOut } = useAuth();
+
   const pathname = usePathname();
   const user = {
     avatarUrl: "",
-    email: "fulano@fulano.com",
-    name: "fulano",
+    email: me.email,
+    name: me.name,
   };
 
   const getInitials = () => {
@@ -49,6 +52,7 @@ export function SideNavigation({ className }: SideNavigationProps) {
           {menuItems
 
             .filter((f) => !f.isOnlyBottomNavigation)
+            .filter((f) => f.roles.includes(me.role))
             .map((item) => {
               const isActive = pathname === item.href;
               return (
@@ -95,7 +99,7 @@ export function SideNavigation({ className }: SideNavigationProps) {
               </Avatar>
               <div className="flex-1 overflow-hidden">
                 <p className="truncate text-sm font-medium">
-                  {user?.name || "User"}
+                  {user?.name || ""}
                 </p>
                 <p className="truncate text-xs text-muted-foreground">
                   {user?.email || ""}
@@ -115,7 +119,7 @@ export function SideNavigation({ className }: SideNavigationProps) {
             </DropdownMenuItem>
             <DropdownMenuItem
               className="text-destructive focus:text-destructive"
-              onClick={() => {}}
+              onClick={signOut}
             >
               <LogOut className="mr-2 h-4 w-4" />
               <span>Sair</span>

@@ -20,10 +20,10 @@ type SignCredentials = {
 };
 
 type ResponseSignIn = {
-  accessToken: string;
+  access_token: string;
 };
 
-type Role = "ADMIN" | "OWNER" | "MANAGER" | "EMPLOYEE";
+export type Role = "ADMIN" | "OWNER" | "MANAGER" | "EMPLOYEE";
 
 type Me = {
   id: string;
@@ -69,11 +69,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   async function signIn(credentials: SignCredentials) {
     const singResponse = await api.post<ResponseSignIn>(
-      "sessions",
+      "/auth/session",
       credentials
     );
 
-    const { accessToken } = singResponse.data;
+    const { ["access_token"]: accessToken } = singResponse.data;
 
     setToken(accessToken);
 
@@ -85,14 +85,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   function getMe(token: string) {
     api
-      .get<Me>("/me", {
+      .get<Me>("/auth/me", {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
         setMe(response.data);
       })
       .catch(() => {
-        // signOut();
+        signOut();
       });
   }
 

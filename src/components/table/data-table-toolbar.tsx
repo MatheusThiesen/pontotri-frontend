@@ -5,7 +5,7 @@ import { Cross2Icon } from "@radix-ui/react-icons";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useDebounce } from "@uidotdev/usehooks";
-import { ListFilter, RotateCw } from "lucide-react";
+import { ListFilter, Plus, RotateCw } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { ReactNode, useCallback, useEffect, useState } from "react";
 import {
@@ -20,13 +20,15 @@ import { DataTableOrderby, DataTableOrderbyProps } from "./data-tablet-orderby";
 interface DataTableToolbarProps {
   orderby?: DataTableOrderbyProps;
   onReload?: () => void;
+  onAdd?: () => void;
   disableSearch?: boolean;
   formFilter?: ReactNode;
 }
 
 export function DataTableToolbar({
-  orderby,
   onReload,
+  onAdd,
+  orderby,
   disableSearch = false,
   formFilter,
 }: DataTableToolbarProps) {
@@ -64,7 +66,7 @@ export function DataTableToolbar({
   return (
     <div className="flex items-center justify-between">
       <div className="flex flex-1 items-center space-x-2">
-        {onReload && (
+        {!!onReload && (
           <Button
             variant="outline"
             size="sm"
@@ -120,6 +122,12 @@ export function DataTableToolbar({
               {formFilter}
             </SheetContent>
           </Sheet>
+        )}
+
+        {!!onAdd && (
+          <Button type="button" onClick={onAdd} className="ml-auto">
+            <Plus /> Adicionar
+          </Button>
         )}
       </div>
     </div>

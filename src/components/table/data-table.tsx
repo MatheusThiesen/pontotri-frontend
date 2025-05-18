@@ -40,6 +40,8 @@ interface DataTableProps<TData, TValue> {
   isLoading?: boolean;
   disableSearch?: boolean;
 
+  onAdd?: () => void;
+
   orderby?: DataTableOrderbyProps;
   formFilter?: React.ReactNode;
 }
@@ -48,10 +50,11 @@ export function DataTable<TData, TValue>({
   columns,
   data,
   total,
-  setPagination,
   pagination,
+  setPagination,
   onClickRow,
   onReload,
+  onAdd,
   orderby,
   isLoading,
   disableSearch = false,
@@ -84,6 +87,7 @@ export function DataTable<TData, TValue>({
           onReload={onReload}
           disableSearch={disableSearch}
           formFilter={formFilter}
+          onAdd={onAdd}
         />
       </Suspense>
       <div className="rounded-md border relative">

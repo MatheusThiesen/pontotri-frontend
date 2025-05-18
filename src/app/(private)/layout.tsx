@@ -1,8 +1,8 @@
-import { MainNavigation } from "@/components/main-navigation";
+import { MainNavigation } from "@/components/navigation/main-navigation";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Inicio | Analytic Alpar do Brasil",
+  title: "Inicio | PontoTRI",
   description: "Pagina de inicial",
 };
 

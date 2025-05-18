@@ -28,7 +28,7 @@ const publicRoutes = [
 ];
 
 export const REDIRECT_WHEN_NOT_AUTHENTICATE_ROUTE = "/";
-export const REDIRECT_WHEN_AUTHENTICATE_ROUTE = "/inicio";
+export const REDIRECT_WHEN_AUTHENTICATE_ROUTE = "/home";
 export const TOKEN_LABEL_AUTH = "access_token";
 export const TOKEN_LABEL_REFRESH = "refresh_token";
 

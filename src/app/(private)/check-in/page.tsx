@@ -1,8 +1,9 @@
 "use client";
 
+import { LocationDisplay } from "@/app/(private)/check-in/_components/location-display";
+import { TimeDisplay } from "@/app/(private)/check-in/_components/time-display";
+import { WebcamCapture } from "@/app/(private)/check-in/_components/webcam-capture";
 import { DetailPage } from "@/components/layouts/detail";
-import { LocationDisplay } from "@/components/location-display";
-import { TimeDisplay } from "@/components/time-display";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -12,7 +13,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { WebcamCapture } from "@/components/webcam-capture";
 import { Camera, Clock, Loader2 } from "lucide-react";
 import { useState } from "react";
 

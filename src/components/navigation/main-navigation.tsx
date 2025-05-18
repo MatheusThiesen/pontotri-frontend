@@ -2,8 +2,9 @@
 
 import type React from "react";
 
-import { BottomNavigation } from "@/components/bottom-navigation";
-import { SideNavigation } from "@/components/side-navigation";
+import { BottomNavigation } from "@/components/navigation/bottom-navigation";
+import { SideNavigation } from "@/components/navigation/side-navigation";
+import { Role } from "@/contexts/AuthProvider";
 import { useScreenSize } from "@/hooks/use-screen-size";
 import { cn } from "@/lib/utils";
 import {
@@ -13,6 +14,7 @@ import {
   CircleCheckBig,
   ClockFading,
   Home,
+  MapPin,
   ScanFace,
   Settings,
   User,
@@ -31,6 +33,7 @@ type MenuItemProps = {
   icon: any;
   isOnlyBottomNavigation?: boolean;
   isOnlySideNavigation?: boolean;
+  roles: Role[];
 };
 
 export const menuItems: MenuItemProps[] = [
@@ -38,58 +41,75 @@ export const menuItems: MenuItemProps[] = [
     icon: Home,
     label: "Início",
     href: "/home",
+    roles: ["ADMIN", "OWNER", "MANAGER", "EMPLOYEE"],
   },
   {
     icon: ClockFading,
     label: "Registros",
     href: "/registers",
+    roles: ["ADMIN", "OWNER", "MANAGER", "EMPLOYEE"],
   },
   {
     icon: ScanFace,
     label: "Registro ponto",
     href: "/check-in",
     isPrincipal: true,
+    roles: ["ADMIN", "OWNER", "MANAGER", "EMPLOYEE"],
   },
   {
     icon: CircleCheckBig,
     label: "Pedidos",
     href: "/requests",
+    roles: ["ADMIN", "OWNER", "MANAGER", "EMPLOYEE"],
   },
   {
     icon: User,
     label: "Perfil",
     href: "/profile",
     isOnlyBottomNavigation: true,
+    roles: ["ADMIN", "OWNER", "MANAGER", "EMPLOYEE"],
   },
   {
     icon: Users,
     label: "Colaboradores",
-    href: "/employees",
+    href: "/users",
     isOnlySideNavigation: true,
+    roles: ["ADMIN", "OWNER", "MANAGER"],
   },
   {
     icon: CalendarClock,
     label: "Jornadas",
     href: "/work-schedules",
     isOnlySideNavigation: true,
+    roles: ["ADMIN", "OWNER"],
   },
   {
     icon: Building2,
-    label: "Setores",
+    label: "Departamentos",
     href: "/departments",
     isOnlySideNavigation: true,
+    roles: ["ADMIN", "OWNER"],
+  },
+  {
+    icon: MapPin,
+    label: "Localizações",
+    href: "/locations",
+    isOnlySideNavigation: true,
+    roles: ["ADMIN", "OWNER"],
   },
   {
     icon: BarChart3,
     label: "Relatórios",
     href: "/reports",
     isOnlySideNavigation: true,
+    roles: ["ADMIN", "OWNER", "MANAGER"],
   },
   {
     icon: Settings,
     label: "Configurações",
     href: "/settings",
     isOnlySideNavigation: true,
+    roles: ["ADMIN", "OWNER"],
   },
 ];
 
