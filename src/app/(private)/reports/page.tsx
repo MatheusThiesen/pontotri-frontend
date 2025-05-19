@@ -6,10 +6,9 @@ import {
   ListingPage,
   ListingTitle,
 } from "@/components/layouts/listing";
-import { withAuth } from "@/components/with-auth";
 import { TableListRequests } from "./_components/TableListRequests";
 
-function UsersPage() {
+export default function Requests() {
   return (
     <ListingPage>
       <ListingHeader>
@@ -22,7 +21,3 @@ function UsersPage() {
     </ListingPage>
   );
 }
-
-export default withAuth(UsersPage, {
-  allowedRoles: ["ADMIN", "OWNER"],
-});

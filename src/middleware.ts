@@ -7,7 +7,6 @@ import {
 const publicRoutes = [
   {
     path: "/",
-    whenAuthenticated: "redirect",
   },
   {
     path: "/sign-in",
