@@ -18,14 +18,15 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Weekday, type WorkScheduleDay } from "@/lib/types";
+import { BreakType, Weekday, type WorkScheduleDay } from "@/lib/types";
 import {
-  calculateBreakDuration,
   calculateTotalWorkMinutes,
   formatMinutesToHours,
 } from "@/lib/utils/date-time";
-import { Clock, Plus, Trash } from "lucide-react";
+import { Clock, Plus, Settings, Trash } from "lucide-react";
 import { useState } from "react";
+import type { JSX } from "react/jsx-runtime";
+import { BreakConfigModal } from "./break-config-modal";
 
 interface WorkScheduleDayTableProps {
   value: WorkScheduleDay[];
@@ -37,6 +38,8 @@ export function WorkScheduleDayTable({
   onChange,
 }: WorkScheduleDayTableProps) {
   const [selectedDay, setSelectedDay] = useState<Weekday | "">("");
+  const [breakModalOpen, setBreakModalOpen] = useState(false);
+  const [currentDay, setCurrentDay] = useState<WorkScheduleDay | null>(null);
 
   const availableWeekdays = Object.values(Weekday).filter(
     (day) => !value.some((scheduleDay) => scheduleDay.weekday === day)
@@ -45,20 +48,18 @@ export function WorkScheduleDayTable({
   const handleAddDay = () => {
     if (!selectedDay) return;
 
-    const breakDuration = calculateBreakDuration("12:00", "13:30");
-
     const newDay: WorkScheduleDay = {
       id: crypto.randomUUID(),
       weekday: selectedDay,
-      startTime: "08:00",
-      endTime: "18:00",
-      breakStartWindow: "12:00",
-      breakEndWindow: "13:30",
-      breakDuration,
+      startTime: "09:00",
+      endTime: "17:00",
+      breakType: BreakType.NONE,
+      breakDuration: 0,
       totalWorkMinutes: calculateTotalWorkMinutes(
-        "08:00",
-        "18:00",
-        breakDuration
+        "09:00",
+        "17:00",
+        BreakType.NONE,
+        0
       ),
     };
 
@@ -79,24 +80,12 @@ export function WorkScheduleDayTable({
       if (day.id === id) {
         const updatedDay = { ...day, [field]: newValue };
 
-        // If break window times are updated, recalculate break duration
-        if (field === "breakStartWindow" || field === "breakEndWindow") {
-          updatedDay.breakDuration = calculateBreakDuration(
-            field === "breakStartWindow" ? newValue : day.breakStartWindow,
-            field === "breakEndWindow" ? newValue : day.breakEndWindow
-          );
-        }
-
         // Recalculate total work minutes when relevant fields change
-        if (
-          field === "startTime" ||
-          field === "endTime" ||
-          field === "breakStartWindow" ||
-          field === "breakEndWindow"
-        ) {
+        if (field === "startTime" || field === "endTime") {
           updatedDay.totalWorkMinutes = calculateTotalWorkMinutes(
             updatedDay.startTime,
             updatedDay.endTime,
+            updatedDay.breakType,
             updatedDay.breakDuration
           );
         }
@@ -109,10 +98,24 @@ export function WorkScheduleDayTable({
     onChange(updatedDays);
   };
 
+  const handleOpenBreakModal = (day: WorkScheduleDay) => {
+    setCurrentDay(day);
+    setBreakModalOpen(true);
+  };
+
+  const handleBreakConfigSave = (updatedDay: WorkScheduleDay) => {
+    const updatedDays = value.map((day) =>
+      day.id === updatedDay.id ? updatedDay : day
+    );
+    onChange(updatedDays);
+    setBreakModalOpen(false);
+  };
+
   const getWeekdayLabel = (weekday: Weekday) => {
     return weekday.charAt(0) + weekday.slice(1).toLowerCase();
   };
 
+  // Get color for weekday badge
   const getWeekdayColor = (weekday: Weekday): string => {
     const colors: Record<Weekday, string> = {
       [Weekday.MONDAY]: "bg-blue-50 text-blue-700 border-blue-200",
@@ -126,28 +129,61 @@ export function WorkScheduleDayTable({
     return colors[weekday];
   };
 
+  // Get break summary for display in table
+  const getBreakSummary = (day: WorkScheduleDay): JSX.Element => {
+    if (day.breakType === BreakType.NONE) {
+      return (
+        <span className="text-sm text-muted-foreground">Sem intervalo</span>
+      );
+    } else if (
+      day.breakType === BreakType.FIXED &&
+      day.breakStartWindow &&
+      day.breakEndWindow
+    ) {
+      return (
+        <Badge
+          variant="outline"
+          className="bg-amber-50 text-amber-700 border-amber-200 font-medium"
+        >
+          Fixo: {day.breakStartWindow} - {day.breakEndWindow} (
+          {day.breakDuration} min)
+        </Badge>
+      );
+    } else if (day.breakType === BreakType.FLEXIBLE) {
+      return (
+        <Badge
+          variant="outline"
+          className="bg-green-50 text-green-700 border-green-200 font-medium"
+        >
+          Livre: {day.breakDuration} min
+        </Badge>
+      );
+    }
+    return (
+      <span className="text-sm text-muted-foreground">
+        Configurar intervalo
+      </span>
+    );
+  };
+
   return (
     <div className="space-y-4">
       <div className="rounded-sm border overflow-hidden bg-white shadow-sm">
         <Table className="border-collapse">
-          <TableHeader className="bg-muted">
+          <TableHeader className="bg-muted/50">
             <TableRow className="hover:bg-transparent divide-x">
-              <TableHead className="border-b w-[100px]">Dia</TableHead>
+              <TableHead className="w-[120px] border-b">Dia</TableHead>
               <TableHead className="border-b">Início</TableHead>
               <TableHead className="border-b">Término</TableHead>
-              <TableHead className="border-b">Início da Pausa</TableHead>
-              <TableHead className="border-b">Fim da Pausa</TableHead>
-              <TableHead className="border-b">Duração da Pausa</TableHead>
-              <TableHead className="border-b w-[100px] text-center">
-                Total
-              </TableHead>
-              <TableHead className="border-b w-[80px]"></TableHead>
+              <TableHead className="border-b">Intervalo</TableHead>
+              <TableHead className="border-b text-center">Total</TableHead>
+              <TableHead className="w-[80px] border-b">Ações</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {value.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={8} className="h-32 text-center">
+                <TableCell colSpan={6} className="h-32 text-center">
                   <div className="flex flex-col items-center justify-center text-muted-foreground">
                     <Clock className="h-8 w-8 mb-2 opacity-40" />
                     <p>Nenhum dia configurado</p>
@@ -190,36 +226,23 @@ export function WorkScheduleDayTable({
                     />
                   </TableCell>
                   <TableCell>
-                    <Input
-                      type="time"
-                      value={day.breakStartWindow}
-                      onChange={(e) =>
-                        updateDay(day.id, "breakStartWindow", e.target.value)
-                      }
-                      className="w-28 rounded-md"
-                    />
-                  </TableCell>
-                  <TableCell>
-                    <Input
-                      type="time"
-                      value={day.breakEndWindow}
-                      onChange={(e) =>
-                        updateDay(day.id, "breakEndWindow", e.target.value)
-                      }
-                      className="w-28 rounded-md"
-                    />
-                  </TableCell>
-                  <TableCell className="text-center">
-                    <div className="flex justify-center">
-                      <Badge
-                        variant="outline"
-                        className="bg-amber-50 text-amber-700 border-amber-200 font-medium"
+                    <div className="flex items-center gap-2">
+                      {getBreakSummary(day)}
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        type="button"
+                        onClick={() => handleOpenBreakModal(day)}
+                        className="h-8 w-8 p-0 rounded-full"
                       >
-                        {day.breakDuration} min
-                      </Badge>
+                        <Settings className="h-4 w-4" />
+                        <span className="sr-only">
+                          Configurar intervalo para {day.weekday}
+                        </span>
+                      </Button>
                     </div>
                   </TableCell>
-                  <TableCell className="text-center">
+                  <TableCell>
                     <div className="flex justify-center">
                       <Badge variant="secondary" className="font-medium">
                         {formatMinutesToHours(day.totalWorkMinutes)}
@@ -281,6 +304,15 @@ export function WorkScheduleDayTable({
           Adicionar
         </Button>
       </div>
+
+      {currentDay && (
+        <BreakConfigModal
+          open={breakModalOpen}
+          onOpenChange={setBreakModalOpen}
+          day={currentDay}
+          onSave={handleBreakConfigSave}
+        />
+      )}
     </div>
   );
 }

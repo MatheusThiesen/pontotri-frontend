@@ -8,14 +8,21 @@ export enum Weekday {
   SUNDAY = "DOMINGO",
 }
 
+export enum BreakType {
+  NONE = "NONE",
+  FIXED = "FIXED",
+  FLEXIBLE = "FLEXIBLE",
+}
+
 export interface WorkScheduleDay {
   id: string;
   weekday: Weekday;
   startTime: string; // format "HH:MM"
   endTime: string; // format "HH:MM"
-  breakStartWindow: string; // format "HH:MM"
-  breakEndWindow: string; // format "HH:MM"
-  breakDuration: number; // in minutes
+  breakType: BreakType;
+  breakStartWindow?: string; // format "HH:MM", only for FIXED type
+  breakEndWindow?: string; // format "HH:MM", only for FIXED type
+  breakDuration: number; // in minutes, for both FIXED and FLEXIBLE types
   totalWorkMinutes: number; // calculated
 }
 

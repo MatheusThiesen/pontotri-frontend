@@ -1,6 +1,9 @@
+import { BreakType } from "../types";
+
 export function calculateTotalWorkMinutes(
   startTime: string,
   endTime: string,
+  breakType: BreakType,
   breakDuration: number
 ): number {
   // Parse times
@@ -19,8 +22,12 @@ export function calculateTotalWorkMinutes(
     totalWorkMinutes += 24 * 60; // Add a full day in minutes
   }
 
-  // Subtract break duration
-  return totalWorkMinutes - breakDuration;
+  // Subtract break duration if there is a break
+  if (breakType !== BreakType.NONE) {
+    return totalWorkMinutes - breakDuration;
+  }
+
+  return totalWorkMinutes;
 }
 
 export function formatMinutesToHours(minutes: number): string {
