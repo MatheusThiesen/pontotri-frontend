@@ -8,7 +8,11 @@ import { columns } from "./columns";
 import { DepartmentForm } from "./department-form";
 
 export function TableListDepartments() {
-  const { data: fetchDepartments, refetch } = useFetchDepartments({
+  const {
+    data: fetchDepartments,
+    refetch,
+    isLoading,
+  } = useFetchDepartments({
     page: 1,
     pagesize: 10,
   });
@@ -36,10 +40,12 @@ export function TableListDepartments() {
         total={fetchDepartments?.total ?? 0}
         pagination={pagination}
         setPagination={setPagination}
+        isLoading={isLoading}
+        disableSearch
+        onReload={refetch}
         onAdd={() => {
           setIsCreateOpen(true);
         }}
-        onReload={refetch}
       />
 
       <DepartmentForm

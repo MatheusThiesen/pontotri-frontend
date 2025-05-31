@@ -39,6 +39,7 @@ export function TableListLocations() {
         pagination={pagination}
         setPagination={setPagination}
         onReload={refetch}
+        disableSearch
         onAdd={() => {
           setIsCreateOpen(true);
         }}
