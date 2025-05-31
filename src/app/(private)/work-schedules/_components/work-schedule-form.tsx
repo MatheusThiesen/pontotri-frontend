@@ -9,7 +9,7 @@ import { useForm } from "react-hook-form";
 import { InputForm } from "@/components/form/InputForm";
 import { Button } from "@/components/ui/button";
 import { Form, FormField, FormItem, FormMessage } from "@/components/ui/form";
-import type { WorkSchedule } from "@/lib/types";
+import type { WorkSchedule } from "@/lib/dto/WorkSchedule";
 import {
   workScheduleSchema,
   type WorkScheduleFormValues,

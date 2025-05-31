@@ -1,6 +1,6 @@
 import { Toaster } from "@/components/ui/sonner";
-import { AuthProvider } from "@/contexts/AuthProvider";
-import { ReactQueryClientProvider } from "@/contexts/ReactQueryClientProvider";
+import { AuthProvider } from "@/lib/contexts/AuthProvider";
+import { ReactQueryProvider } from "@/lib/services/react-query";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "../styles/globals.css";
@@ -30,13 +30,13 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <ReactQueryClientProvider>
+        <ReactQueryProvider>
           <AuthProvider>
             {children}
 
             <Toaster richColors position="top-center" theme="light" />
           </AuthProvider>
-        </ReactQueryClientProvider>
+        </ReactQueryProvider>
       </body>
     </html>
   );

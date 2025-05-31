@@ -1,7 +1,7 @@
 "use client";
 
-import type { Role } from "@/contexts/AuthProvider";
-import { useAuth } from "@/contexts/AuthProvider";
+import type { Role } from "@/lib/contexts/AuthProvider";
+import { useAuth } from "@/lib/contexts/AuthProvider";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 

@@ -27,10 +27,13 @@ export type Role = "ADMIN" | "OWNER" | "MANAGER" | "EMPLOYEE";
 
 type Me = {
   id: string;
-  email: string;
   name: string;
-  password: string;
+  email: string;
+  companyId: string;
+  departmentId: string;
+  workScheduleId: string;
   role: Role;
+  isActive: boolean;
 };
 
 type AuthContextData = {

@@ -1,14 +1,17 @@
 "use client";
 
+import { useFetchDepartments } from "@/lib/hooks/use-fetch-departments";
 import { PaginationState } from "@tanstack/react-table";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { DataTable } from "../../../../components/table/data-table";
 import { columns } from "./columns";
 import { DepartmentForm } from "./department-form";
 
 export function TableListDepartments() {
-  const router = useRouter();
+  const { data: fetchDepartments, refetch } = useFetchDepartments({
+    page: 1,
+    pagesize: 10,
+  });
   const [isCreateOpen, setIsCreateOpen] = useState(false);
 
   const [pagination, setPagination] = useState<PaginationState>({
@@ -24,19 +27,19 @@ export function TableListDepartments() {
     <>
       <DataTable
         columns={columns}
-        data={[
-          {
-            id: "1",
-            name: "RH",
-          },
-        ]}
-        total={0}
+        data={
+          fetchDepartments?.data?.map((item) => ({
+            id: item.id,
+            name: item.name,
+          })) ?? []
+        }
+        total={fetchDepartments?.total ?? 0}
         pagination={pagination}
         setPagination={setPagination}
         onAdd={() => {
           setIsCreateOpen(true);
         }}
-        onReload={() => {}}
+        onReload={refetch}
       />
 
       <DepartmentForm

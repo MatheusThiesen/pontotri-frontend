@@ -1,5 +1,5 @@
 import * as z from "zod";
-import { BreakType, Weekday } from "../types";
+import { BreakType, Weekday } from "../dto/WorkSchedule";
 
 export const workScheduleDaySchema = z.object({
   id: z.string(),

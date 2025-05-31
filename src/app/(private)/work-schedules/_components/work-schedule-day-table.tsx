@@ -18,7 +18,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { BreakType, Weekday, type WorkScheduleDay } from "@/lib/types";
+import {
+  BreakType,
+  Weekday,
+  type WorkScheduleDay,
+} from "@/lib/dto/WorkSchedule";
 import {
   calculateTotalWorkMinutes,
   formatMinutesToHours,
@@ -172,12 +176,12 @@ export function WorkScheduleDayTable({
         <Table className="border-collapse">
           <TableHeader className="bg-muted/50">
             <TableRow className="hover:bg-transparent divide-x">
-              <TableHead className="w-[120px] border-b">Dia</TableHead>
-              <TableHead className="border-b">Início</TableHead>
-              <TableHead className="border-b">Término</TableHead>
-              <TableHead className="border-b">Intervalo</TableHead>
-              <TableHead className="border-b text-center">Total</TableHead>
-              <TableHead className="w-[80px] border-b">Ações</TableHead>
+              <TableHead className="w-[120px]">Dia</TableHead>
+              <TableHead>Início</TableHead>
+              <TableHead>Término</TableHead>
+              <TableHead>Intervalo</TableHead>
+              <TableHead className=" text-center">Total</TableHead>
+              <TableHead className="w-[80px]  text-center">Ações</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>

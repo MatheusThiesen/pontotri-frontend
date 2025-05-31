@@ -1,4 +1,4 @@
-import { BreakType } from "../types";
+import { BreakType } from "../dto/WorkSchedule";
 
 export function calculateTotalWorkMinutes(
   startTime: string,

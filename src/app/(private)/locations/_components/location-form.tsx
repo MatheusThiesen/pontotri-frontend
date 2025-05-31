@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { z } from "zod";
 
 import { InputForm } from "@/components/form/InputForm";
 import { Button } from "@/components/ui/button";
@@ -15,13 +16,15 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Form } from "@/components/ui/form";
-import { z } from "zod";
+import { useLocationActions } from "@/lib/actions/use-location-actions";
+import { useAuth } from "@/lib/contexts/AuthProvider";
+import { Location } from "@/lib/hooks/use-fetch-locations";
 
 interface LocationFormProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onSuccess: () => void;
-  location?: any;
+  location?: Location;
 }
 
 const locationFormSchema = z.object({
@@ -56,6 +59,8 @@ export function LocationForm({
   onSuccess,
   location,
 }: LocationFormProps) {
+  const { me } = useAuth();
+  const { createMutation, updateMutation } = useLocationActions();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const isEditing = !!location;
 
@@ -63,8 +68,8 @@ export function LocationForm({
     resolver: zodResolver(locationFormSchema),
     defaultValues: {
       description: location?.description ?? "",
-      latitude: location?.latitude ?? "0",
-      longitude: location?.longitude ?? "0",
+      latitude: location?.latitude ?? 0,
+      longitude: location?.longitude ?? 0,
     },
   });
 
@@ -73,18 +78,19 @@ export function LocationForm({
 
     try {
       if (isEditing && location) {
-        // await updateLocation({
-        //   id: location.id,
-        //   ...data,
-        //   latitude: Number.parseFloat(data.latitude),
-        //   longitude: Number.parseFloat(data.longitude),
-        // })
+        await updateMutation.mutateAsync({
+          id: location.id,
+          description: data.description,
+          latitude: data.latitude,
+          longitude: data.longitude,
+        });
       } else {
-        // await createLocation({
-        //   ...data,
-        //   latitude: Number.parseFloat(data.latitude),
-        //   longitude: Number.parseFloat(data.longitude),
-        // })
+        await createMutation.mutateAsync({
+          companyId: me.companyId,
+          description: data.description,
+          latitude: data.latitude,
+          longitude: data.longitude,
+        });
       }
       onSuccess();
     } catch (error) {

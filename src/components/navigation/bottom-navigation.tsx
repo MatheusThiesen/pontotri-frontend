@@ -1,6 +1,6 @@
 "use client";
 
-import { useAuth } from "@/contexts/AuthProvider";
+import { useAuth } from "@/lib/contexts/AuthProvider";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { usePathname } from "next/navigation";

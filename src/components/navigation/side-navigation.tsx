@@ -7,7 +7,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useAuth } from "@/contexts/AuthProvider";
+import { useAuth } from "@/lib/contexts/AuthProvider";
 import { cn } from "@/lib/utils";
 import { LogOut, User } from "lucide-react";
 import Link from "next/link";

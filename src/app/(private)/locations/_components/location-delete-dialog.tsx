@@ -13,6 +13,8 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
+import { useLocationActions } from "@/lib/actions/use-location-actions";
+import { Location } from "@/lib/hooks/use-fetch-locations";
 
 interface LocationDeleteDialogProps {
   open: boolean;
@@ -27,11 +29,13 @@ export function LocationDeleteDialog({
   location,
   onSuccess,
 }: LocationDeleteDialogProps) {
+  const { deleteMutation } = useLocationActions();
   const [isDeleting, setIsDeleting] = useState(false);
 
   async function handleDelete() {
     setIsDeleting(true);
     try {
+      await deleteMutation?.mutateAsync(location.id);
       onSuccess();
     } catch (error) {
       console.error("Erro ao deletar localização:", error);
@@ -47,7 +51,8 @@ export function LocationDeleteDialog({
           <AlertDialogTitle>Você tem certeza?</AlertDialogTitle>
           <AlertDialogDescription>
             Essa ação não pode ser desfeita. Isso excluirá permanentemente a
-            localização e a removerá dos nossos servidores.
+            localização ({location.description}) e a removerá dos nossos
+            servidores.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

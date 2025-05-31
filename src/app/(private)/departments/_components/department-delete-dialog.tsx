@@ -13,11 +13,13 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
+import { useDepartmentActions } from "@/lib/actions/use-department-actions";
+import { Department } from "@/lib/hooks/use-fetch-departments";
 
 interface DepartmentDeleteDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  department: any;
+  department: Department;
   onSuccess: () => void;
 }
 
@@ -27,14 +29,16 @@ export function DepartmentDeleteDialog({
   department,
   onSuccess,
 }: DepartmentDeleteDialogProps) {
+  const { deleteMutation } = useDepartmentActions();
   const [isDeleting, setIsDeleting] = useState(false);
 
   async function handleDelete() {
     setIsDeleting(true);
     try {
+      await deleteMutation?.mutateAsync(department.id);
       onSuccess();
     } catch (error) {
-      console.error("Erro ao deletar localização:", error);
+      console.error("Erro ao deletar departamento:", error);
     } finally {
       setIsDeleting(false);
     }
@@ -47,7 +51,7 @@ export function DepartmentDeleteDialog({
           <AlertDialogTitle>Você tem certeza?</AlertDialogTitle>
           <AlertDialogDescription>
             Essa ação não pode ser desfeita. Isso excluirá permanentemente a
-            localização e a removerá dos nossos servidores.
+            departamento ({department.name}) e a removerá dos nossos servidores.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

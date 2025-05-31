@@ -4,8 +4,8 @@ import type React from "react";
 
 import { BottomNavigation } from "@/components/navigation/bottom-navigation";
 import { SideNavigation } from "@/components/navigation/side-navigation";
-import { Role } from "@/contexts/AuthProvider";
-import { useScreenSize } from "@/hooks/use-screen-size";
+import { Role } from "@/lib/contexts/AuthProvider";
+import { useScreenSize } from "@/lib/hooks/use-screen-size";
 import { cn } from "@/lib/utils";
 import {
   BarChart3,

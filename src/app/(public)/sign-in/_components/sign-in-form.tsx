@@ -2,7 +2,7 @@ import { InputForm } from "@/components/form/InputForm";
 import { Button } from "@/components/ui/button";
 import { CardContent, CardFooter } from "@/components/ui/card";
 import { Form } from "@/components/ui/form";
-import { useAuth } from "@/contexts/AuthProvider";
+import { useAuth } from "@/lib/contexts/AuthProvider";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AxiosError } from "axios";
 import { LoaderCircle } from "lucide-react";

@@ -11,7 +11,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { BreakType, type WorkScheduleDay } from "@/lib/types";
+import { BreakType, type WorkScheduleDay } from "@/lib/dto/WorkSchedule";
 import {
   calculateBreakDuration,
   calculateTotalWorkMinutes,
@@ -43,7 +43,6 @@ export function BreakConfigModal({
   const handleSave = () => {
     let updatedBreakDuration = breakDuration;
 
-    // If break type is FIXED, calculate duration from start and end times
     if (breakType === BreakType.FIXED) {
       updatedBreakDuration = calculateBreakDuration(
         breakStartWindow,
@@ -51,7 +50,6 @@ export function BreakConfigModal({
       );
     }
 
-    // If break type is NONE, set duration to 0
     if (breakType === BreakType.NONE) {
       updatedBreakDuration = 0;
     }

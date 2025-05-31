@@ -15,6 +15,8 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Form } from "@/components/ui/form";
+import { useDepartmentActions } from "@/lib/actions/use-department-actions";
+import { useAuth } from "@/lib/contexts/AuthProvider";
 import { z } from "zod";
 
 interface DepartmentFormProps {
@@ -38,6 +40,8 @@ export function DepartmentForm({
   onSuccess,
   department,
 }: DepartmentFormProps) {
+  const { me } = useAuth();
+  const { createMutation, updateMutation } = useDepartmentActions();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const isEditing = !!department;
 
@@ -53,18 +57,15 @@ export function DepartmentForm({
 
     try {
       if (isEditing && department) {
-        // await updateDepartment({
-        //   id: department.id,
-        //   ...data,
-        //   latitude: Number.parseFloat(data.latitude),
-        //   longitude: Number.parseFloat(data.longitude),
-        // })
+        await updateMutation.mutateAsync({
+          id: department.id,
+          name: data.name,
+        });
       } else {
-        // await createDepartment({
-        //   ...data,
-        //   latitude: Number.parseFloat(data.latitude),
-        //   longitude: Number.parseFloat(data.longitude),
-        // })
+        await createMutation.mutateAsync({
+          name: data.name,
+          companyId: me.companyId,
+        });
       }
       onSuccess();
     } catch (error) {
