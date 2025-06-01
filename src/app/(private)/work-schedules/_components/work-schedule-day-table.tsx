@@ -22,7 +22,7 @@ import {
   BreakType,
   Weekday,
   type WorkScheduleDay,
-} from "@/lib/dto/WorkSchedule";
+} from "@/lib/hooks/use-fetch-work-schedules";
 import {
   calculateTotalWorkMinutes,
   formatMinutesToHours,

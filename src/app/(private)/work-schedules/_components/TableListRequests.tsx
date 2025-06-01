@@ -1,5 +1,6 @@
 "use client";
 
+import { useFetchWorkSchedules } from "@/lib/hooks/use-fetch-work-schedules";
 import { PaginationState } from "@tanstack/react-table";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -8,6 +9,14 @@ import { columns } from "./columns";
 
 export function TableListRequests() {
   const router = useRouter();
+  const {
+    data: fetchLocations,
+    refetch,
+    isLoading,
+  } = useFetchWorkSchedules({
+    page: 1,
+    pagesize: 10,
+  });
 
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
@@ -17,13 +26,14 @@ export function TableListRequests() {
   return (
     <DataTable
       columns={columns}
-      data={[]}
-      total={0}
+      data={fetchLocations?.data ?? []}
+      total={fetchLocations?.total ?? 0}
       pagination={pagination}
       setPagination={setPagination}
-      onClickRow={(row) => router.push(`/clientes/${row.id}`)}
-      onReload={() => {}}
-      isLoading={false}
+      onClickRow={(row) => router.push(`/work-schedules/${row.id}`)}
+      onReload={refetch}
+      isLoading={isLoading}
+      disableSearch
       onAdd={() => {
         router.push("/work-schedules/create");
       }}

@@ -26,19 +26,20 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useAuth } from "@/lib/contexts/AuthProvider";
 import { Camera, Edit, Key, User } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 
 export default function ProfilePage() {
+  const { me } = useAuth();
   const [isEditProfileOpen, setIsEditProfileOpen] = useState(false);
   const [isChangePasswordOpen, setIsChangePasswordOpen] = useState(false);
 
-  // Sample user data
   const user = {
-    name: "John Doe",
-    email: "john.doe@example.com",
-    role: "Employee",
+    name: me.name ?? "",
+    email: me.email ?? "",
+    role: me.role ?? "",
     department: "Engineering",
     employeeId: "EMP-12345",
     joinDate: "2022-01-15",
@@ -66,7 +67,7 @@ export default function ProfilePage() {
                   alt={user.name}
                 />
                 <AvatarFallback className="text-2xl">
-                  {user.name
+                  {user?.name
                     .split(" ")
                     .map((n) => n[0])
                     .join("")}

@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { ArrowLeft, ChevronDown } from "lucide-react";
+import { ArrowLeft, ChevronDown, LoaderCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { ReactNode } from "react";
 import { ClassNameValue } from "tailwind-merge";
@@ -90,8 +90,16 @@ export const DetailGoBack = () => {
 
 interface DetailMainProps {
   children?: ReactNode;
+  isLoading?: boolean;
 }
-export const DetailMain = ({ children }: DetailMainProps) => {
+export const DetailMain = ({ children, isLoading }: DetailMainProps) => {
+  if (isLoading)
+    return (
+      <div className="flex items-center justify-center h-20">
+        <LoaderCircle className="animate-spin size-8" />
+      </div>
+    );
+
   return <div className="bg-box rounded-lg">{children}</div>;
 };
 

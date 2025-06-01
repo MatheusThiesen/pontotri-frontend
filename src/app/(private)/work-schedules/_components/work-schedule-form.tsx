@@ -2,18 +2,26 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 
 import { InputForm } from "@/components/form/InputForm";
 import { Button } from "@/components/ui/button";
 import { Form, FormField, FormItem, FormMessage } from "@/components/ui/form";
-import type { WorkSchedule } from "@/lib/dto/WorkSchedule";
+
+import { useWorkScheduleActions } from "@/lib/actions/use-work-schedule-actions";
+import { useAuth } from "@/lib/contexts/AuthProvider";
+import {
+  Weekday,
+  WeekdayPortugueseToEnglish,
+  WorkSchedule,
+} from "@/lib/hooks/use-fetch-work-schedules";
 import {
   workScheduleSchema,
   type WorkScheduleFormValues,
 } from "@/lib/validations/work-schedule";
+import axios from "axios";
+import { toast } from "sonner";
 import { WorkScheduleDayTable } from "./work-schedule-day-table";
 
 interface WorkScheduleFormProps {
@@ -21,8 +29,9 @@ interface WorkScheduleFormProps {
 }
 
 export function WorkScheduleForm({ workSchedule }: WorkScheduleFormProps) {
+  const { me } = useAuth();
+  const { createMutation, updateMutation } = useWorkScheduleActions();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const router = useRouter();
 
   const isEditing = !!workSchedule;
 
@@ -30,11 +39,49 @@ export function WorkScheduleForm({ workSchedule }: WorkScheduleFormProps) {
     resolver: zodResolver(workScheduleSchema),
     defaultValues: {
       name: workSchedule?.name || "",
-      days: workSchedule?.days || [],
+      days:
+        workSchedule?.days.map((day) => ({
+          ...day,
+          weekday: (Weekday as any)[day.weekday],
+        })) || [],
     },
   });
 
-  async function onSubmit(data: WorkScheduleFormValues) {}
+  async function onSubmit(data: WorkScheduleFormValues) {
+    try {
+      if (isEditing && workSchedule) {
+        await updateMutation.mutateAsync({
+          id: workSchedule.id,
+          name: data.name,
+          days: data.days.map((day) => ({
+            ...day,
+            weekday: WeekdayPortugueseToEnglish[day.weekday] as any,
+          })),
+        });
+      } else {
+        await createMutation.mutateAsync({
+          name: data.name,
+          days: data.days.map((day) => ({
+            ...day,
+            weekday: WeekdayPortugueseToEnglish[day.weekday] as any,
+          })),
+          companyId: me.companyId,
+        });
+        form.reset();
+      }
+      toast.success("Ação realizada com sucesso");
+    } catch (err) {
+      if (axios.isAxiosError(err)) {
+        toast.warning(
+          err.response?.data.message || "Erro ao enviar o formulário"
+        );
+      } else {
+        toast.error("Erro desconhecido ao enviar o formulário");
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
 
   return (
     <Form {...form}>

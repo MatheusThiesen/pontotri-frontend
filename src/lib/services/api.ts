@@ -20,8 +20,6 @@ export function setupAPIClient(
       let cookies = parseCookies(ctx);
       const { [TOKEN_LABEL_AUTH]: token } = cookies;
 
-      console.log(token);
-
       if (token) {
         config.headers!["Authorization"] = `Bearer ${token}`;
       }

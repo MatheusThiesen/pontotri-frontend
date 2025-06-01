@@ -11,7 +11,10 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { BreakType, type WorkScheduleDay } from "@/lib/dto/WorkSchedule";
+import {
+  BreakType,
+  type WorkScheduleDay,
+} from "@/lib/hooks/use-fetch-work-schedules";
 import {
   calculateBreakDuration,
   calculateTotalWorkMinutes,
