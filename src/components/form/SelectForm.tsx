@@ -1,6 +1,6 @@
-import { cn } from "@/lib/utils"
-import { Control } from "react-hook-form"
-import { ClassNameValue } from "tailwind-merge"
+import { cn } from "@/lib/utils";
+import { Control } from "react-hook-form";
+import { ClassNameValue } from "tailwind-merge";
 import {
   FormControl,
   FormDescription,
@@ -8,28 +8,28 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../ui/form"
+} from "../ui/form";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../ui/select"
+} from "../ui/select";
 
 interface Props {
-  control: Control<any>
-  name: string
-  label?: string
-  placeholder?: string
-  description?: string
-  data: SelectItemProps[]
-  className?: ClassNameValue
+  control: Control<any>;
+  name: string;
+  label?: string;
+  placeholder?: string;
+  description?: string;
+  data: SelectItemProps[];
+  className?: ClassNameValue;
 }
 
 export interface SelectItemProps {
-  value: string
-  label: string
+  value: string;
+  label: string;
 }
 
 export const SelectForm = ({
@@ -39,19 +39,20 @@ export const SelectForm = ({
   data,
   description,
   className,
+  placeholder,
 }: Props) => {
   return (
     <FormField
       control={control}
       name={name}
       render={({ field }) => (
-        <FormItem className={cn(className)}>
+        <FormItem className={cn("flex-1", className)}>
           {label && <FormLabel>{label}</FormLabel>}
 
           <Select onValueChange={field.onChange} defaultValue={field.value}>
             <FormControl>
-              <SelectTrigger>
-                <SelectValue placeholder="Selecionar..." />
+              <SelectTrigger className="w-full ">
+                <SelectValue placeholder={placeholder ?? "Selecionar..."} />
               </SelectTrigger>
             </FormControl>
             <SelectContent>
@@ -69,5 +70,5 @@ export const SelectForm = ({
         </FormItem>
       )}
     />
-  )
-}
+  );
+};

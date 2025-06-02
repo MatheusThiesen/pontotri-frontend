@@ -39,7 +39,7 @@ export function InputForm({
       control={control}
       name={name}
       render={({ field, fieldState }) => (
-        <FormItem className="mb-4">
+        <FormItem className="flex-1">
           {label && <FormLabel>{label}</FormLabel>}
           <FormControl>
             <div className="relative">
