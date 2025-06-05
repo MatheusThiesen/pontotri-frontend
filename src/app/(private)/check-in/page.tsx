@@ -13,14 +13,39 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { api } from "@/lib/services/api";
+import { compressImageBase64 } from "@/lib/utils/image";
+import axios from "axios";
 import { Camera, Clock, Loader2 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 export default function CheckInPage() {
   const [isCapturing, setIsCapturing] = useState(false);
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [checkInSuccess, setCheckInSuccess] = useState(false);
+  const [location, setLocation] = useState<{
+    latitude: number;
+    longitude: number;
+  } | null>(null);
+
+  useEffect(() => {
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setLocation({
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+          });
+        },
+        (error) => {
+          console.error("Erro ao obter localização:", error);
+          toast.error("Não foi possível obter sua localização");
+        }
+      );
+    }
+  }, []);
 
   const handleCapture = (imageSrc: string) => {
     setCapturedImage(imageSrc);
@@ -33,19 +58,42 @@ export default function CheckInPage() {
       return;
     }
 
+    if (!location) {
+      toast.error(
+        "É necessário permitir o acesso à localização para registrar o ponto"
+      );
+      return;
+    }
+
     setIsSubmitting(true);
 
-    // Simular chamada à API
-    await new Promise((resolve) => setTimeout(resolve, 1500));
+    try {
+      const compressedImage = await compressImageBase64(capturedImage);
 
-    setIsSubmitting(false);
-    setCheckInSuccess(true);
+      await api.post("/time-records/check-in", {
+        checkInImage: compressedImage,
+        latitude: location.latitude,
+        longitude: location.longitude,
+      });
 
-    // Resetar após mostrar mensagem de sucesso
-    setTimeout(() => {
+      setCheckInSuccess(true);
+      toast.success("Ponto registrado com sucesso!");
+
       setCapturedImage(null);
       setCheckInSuccess(false);
-    }, 3000);
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        toast.warning(
+          error.response?.data.message ||
+            "Erro ao registrar ponto. Tente novamente."
+        );
+      } else {
+        console.error("Erro ao registrar ponto:", error);
+        toast.error("Erro ao registrar ponto. Tente novamente.");
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -113,7 +161,9 @@ export default function CheckInPage() {
             <Button
               className="w-full"
               size="lg"
-              onClick={() => setIsCapturing(true)}
+              onClick={() => {
+                setIsCapturing(true);
+              }}
             >
               <Camera className="mr-2 h-4 w-4" />
               Capturar Foto
