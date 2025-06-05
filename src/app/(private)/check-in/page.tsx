@@ -16,15 +16,15 @@ import {
 import { api } from "@/lib/services/api";
 import { compressImageBase64 } from "@/lib/utils/image";
 import axios from "axios";
-import { Camera, Clock, Loader2 } from "lucide-react";
+import { Clock, Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 export default function CheckInPage() {
-  const [isCapturing, setIsCapturing] = useState(false);
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [checkInSuccess, setCheckInSuccess] = useState(false);
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [location, setLocation] = useState<{
     latitude: number;
     longitude: number;
@@ -49,12 +49,11 @@ export default function CheckInPage() {
 
   const handleCapture = (imageSrc: string) => {
     setCapturedImage(imageSrc);
-    setIsCapturing(false);
   };
 
   const handleRegisterTime = async () => {
     if (!capturedImage) {
-      setIsCapturing(true);
+      toast.error("É necessário capturar uma foto para registrar o ponto");
       return;
     }
 
@@ -79,8 +78,10 @@ export default function CheckInPage() {
       setCheckInSuccess(true);
       toast.success("Ponto registrado com sucesso!");
 
-      setCapturedImage(null);
-      setCheckInSuccess(false);
+      setTimeout(() => {
+        setCapturedImage(null);
+        setCheckInSuccess(false);
+      }, 3000);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         toast.warning(
@@ -120,11 +121,8 @@ export default function CheckInPage() {
                 <div className="text-3xl font-bold mb-2">Sucesso!</div>
                 <p>Seu horário foi registrado</p>
               </div>
-            ) : isCapturing || !capturedImage ? (
-              <WebcamCapture
-                onCapture={handleCapture}
-                isCapturing={isCapturing}
-              />
+            ) : !capturedImage ? (
+              <WebcamCapture onCapture={handleCapture} isCapturing />
             ) : (
               <div className="relative w-full h-full">
                 <img
@@ -136,19 +134,10 @@ export default function CheckInPage() {
                   variant="outline"
                   size="sm"
                   className="absolute top-2 right-2 bg-white/80 hover:bg-white"
-                  onClick={() => setIsCapturing(true)}
+                  onClick={() => setCapturedImage(null)}
                 >
                   Tirar Novamente
                 </Button>
-              </div>
-            )}
-
-            {!isCapturing && !capturedImage && !checkInSuccess && (
-              <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/50 text-white">
-                <Camera className="h-12 w-12 mb-2" />
-                <p className="text-center px-4">
-                  Clique no botão "Capturar Foto" para ativar sua câmera
-                </p>
               </div>
             )}
           </div>
@@ -157,24 +146,15 @@ export default function CheckInPage() {
         </CardContent>
 
         <CardFooter className="flex flex-col gap-4 border-t pt-4">
-          {!capturedImage && !checkInSuccess && (
-            <Button
-              className="w-full"
-              size="lg"
-              onClick={() => {
-                setIsCapturing(true);
-              }}
-            >
-              <Camera className="mr-2 h-4 w-4" />
-              Capturar Foto
-            </Button>
-          )}
-
           <Button
-            className="w-full bg-gradient-to-r from-teal-500 to-blue-500 hover:from-teal-600 hover:to-blue-600"
+            className={`w-full ${
+              !capturedImage
+                ? "cursor-not-allowed bg-gray-400 hover:bg-gray-400 "
+                : "cursor-pointer bg-gradient-to-r from-teal-500 to-blue-500 hover:from-teal-600 hover:to-blue-600"
+            }`}
             size="lg"
             onClick={handleRegisterTime}
-            disabled={isSubmitting || checkInSuccess}
+            disabled={isSubmitting || checkInSuccess || !capturedImage}
           >
             {isSubmitting ? (
               <>
