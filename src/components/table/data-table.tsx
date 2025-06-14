@@ -31,9 +31,9 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
 
-  pagination: PaginationState;
-  setPagination: React.Dispatch<React.SetStateAction<PaginationState>>;
-  total: number;
+  pagination?: PaginationState;
+  setPagination?: React.Dispatch<React.SetStateAction<PaginationState>>;
+  total?: number;
 
   onReload?: () => void;
   onClickRow?: (data: TData) => void;
@@ -69,14 +69,20 @@ export function DataTable<TData, TValue>({
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     manualPagination: true,
-    pageCount: Math.ceil(total / pagination.pageSize),
-    onPaginationChange: (updater: any) => {
-      const updated = updater(pagination);
+    pageCount:
+      !!total && !!pagination
+        ? Math.ceil(total / pagination.pageSize)
+        : undefined,
+    onPaginationChange:
+      !!pagination && !!setPagination
+        ? (updater: any) => {
+            const updated = updater(pagination);
 
-      if (updated) {
-        setPagination(updated);
-      }
-    },
+            if (updated) {
+              setPagination(updated);
+            }
+          }
+        : undefined,
   });
 
   return (
@@ -161,9 +167,12 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      <Suspense>
-        <DataTablePagination table={table} />
-      </Suspense>
+
+      {!!pagination && !!setPagination && (
+        <Suspense>
+          <DataTablePagination table={table} />
+        </Suspense>
+      )}
     </div>
   );
 }

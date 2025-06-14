@@ -6,7 +6,7 @@ import {
   ListingPage,
   ListingTitle,
 } from "@/components/layouts/listing";
-import { TableListRequests } from "./_components/TableListRequests";
+import { TableListRequests } from "./_components/table-list-requests";
 
 export default function Requests() {
   return (

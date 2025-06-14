@@ -20,11 +20,11 @@ import { InputFileForm } from "@/components/form/InputFileForm";
 import { SelectForm } from "@/components/form/SelectForm";
 import { useUserActions } from "@/lib/actions/use-user-actions";
 import { useAuth } from "@/lib/contexts/AuthProvider";
-import { User, UserRole } from "@/lib/hooks/use-fetch-users";
+import { User, USER_ROLE_OPTIONS, UserRole } from "@/lib/hooks/use-fetch-users";
 import {
-  UserFormValues,
   createUserSchema,
   updateUserSchema,
+  UserFormValues,
 } from "@/lib/validations/user";
 import axios from "axios";
 import { toast } from "sonner";
@@ -149,6 +149,12 @@ export function UserForm({ user }: UserFormProps) {
               })) ?? []
             }
           />
+          <SelectForm
+            label="Função"
+            name="role"
+            control={form.control}
+            data={USER_ROLE_OPTIONS.filter((f) => f.value !== "ADMIN")}
+          />
 
           <SelectForm
             label="Jornada de Trabalho"
@@ -161,17 +167,6 @@ export function UserForm({ user }: UserFormProps) {
                 value: item.id,
               })) ?? []
             }
-          />
-
-          <SelectForm
-            label="Função"
-            name="role"
-            control={form.control}
-            data={[
-              { value: "OWNER", label: "Proprietário" },
-              { value: "MANAGER", label: "Gerente" },
-              { value: "EMPLOYEE", label: "Colaborador" },
-            ]}
           />
         </GroupInput>
 

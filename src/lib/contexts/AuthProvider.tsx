@@ -10,6 +10,8 @@ import {
   useEffect,
   useState,
 } from "react";
+import { Department } from "../hooks/use-fetch-departments";
+import { WorkSchedule } from "../hooks/use-fetch-work-schedules";
 
 type SignCredentials = {
   cod?: number;
@@ -25,15 +27,26 @@ type ResponseSignIn = {
 
 export type Role = "ADMIN" | "OWNER" | "MANAGER" | "EMPLOYEE";
 
+export type Company = {
+  id: string;
+  name: string;
+  cnpj: string;
+};
+
 type Me = {
   id: string;
   name: string;
   email: string;
+  profileImage?: string;
   companyId: string;
   departmentId: string;
   workScheduleId: string;
   role: Role;
   isActive: boolean;
+
+  department?: Department;
+  workSchedule?: WorkSchedule;
+  company?: Company;
 };
 
 type AuthContextData = {

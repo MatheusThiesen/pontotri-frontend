@@ -1,6 +1,7 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
+import { MapPin } from "lucide-react";
 import { toast } from "sonner";
 import { z } from "zod";
 import { LocationActions } from "./location-actions";
@@ -19,7 +20,10 @@ export const columns: ColumnDef<Client>[] = [
     accessorKey: "description",
     header: "Descrição",
     cell: ({ row }) => (
-      <div className="w-[200px]">{row.getValue("description")}</div>
+      <div className="flex items-center gap-2 text-muted-foreground">
+        <MapPin className="h-3.5 w-3.5" />
+        <span>{row.original.description}</span>
+      </div>
     ),
   },
   {

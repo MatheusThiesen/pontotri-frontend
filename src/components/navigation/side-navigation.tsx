@@ -63,7 +63,7 @@ export function SideNavigation({ className }: SideNavigationProps) {
 
               <ul className="mb-6">
                 {items.map((item) => {
-                  const isActive = pathname === item.href;
+                  const isActive = pathname.startsWith(item.href);
                   return (
                     <li key={item.href}>
                       <Link
@@ -96,42 +96,6 @@ export function SideNavigation({ className }: SideNavigationProps) {
             </div>
           );
         })}
-
-        {/* <ul className="space-y-2">
-          {menuItems
-            .filter((f) => !f.isOnlyBottomNavigation)
-            .filter((f) => f.roles.includes(me.role))
-            .map((item) => {
-              const isActive = pathname === item.href;
-              return (
-                <li key={item.href}>
-                  <Link
-                    href={item.href}
-                    className={cn(
-                      "flex items-center gap-3 rounded-md px-3 py-2 transition-colors",
-                      isActive
-                        ? "bg-primary/10 text-primary"
-                        : "text-muted-foreground hover:bg-muted hover:text-foreground",
-                      item.isPrincipal ? "font-medium" : ""
-                    )}
-                  >
-                    <item.icon
-                      className={cn(
-                        "h-5 w-5",
-                        item.isNew ? "text-primary" : ""
-                      )}
-                    />
-                    <span>{item.label}</span>
-                    {item.isNew && (
-                      <span className="ml-auto rounded-full bg-primary px-2 py-0.5 text-xs text-primary-foreground">
-                        Novo
-                      </span>
-                    )}
-                  </Link>
-                </li>
-              );
-            })}
-        </ul> */}
       </nav>
 
       <div className="border-t p-4">

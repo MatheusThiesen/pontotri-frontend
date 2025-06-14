@@ -1,3 +1,6 @@
+"use client";
+
+import { HomeSkeleton } from "@/components/home-skeleton";
 import {
   DetailPage,
   DetailSubtitle,
@@ -10,9 +13,38 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Calendar, Clock, MapPin, Users } from "lucide-react";
+import { TIME_RECORD_TYPE_LABELS } from "@/lib/hooks/use-fetch-records";
+import { useFetchReports } from "@/lib/hooks/use-fetch-reports";
+import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
+import {
+  BriefcaseBusiness,
+  Calendar,
+  Clock,
+  LogOut,
+  UtensilsCrossed,
+} from "lucide-react";
 
 export default function Home() {
+  const { data: getReport, isLoading } = useFetchReports({
+    key: "home-analytic",
+  });
+
+  if (isLoading) {
+    return <HomeSkeleton />;
+  }
+
+  const homeAnalytic = {
+    lastRecords: getReport?.homeAnalytic.lastRecords ?? [],
+    nextDays: getReport?.homeAnalytic.nextDays ?? [],
+    totalHours: (getReport?.homeAnalytic.totalHours ?? 0).toFixed(0),
+    monthDays: getReport?.homeAnalytic.monthDays ?? {
+      present: 0,
+      days: 0,
+      percentage: 0,
+    },
+  };
+
   return (
     <DetailPage>
       <DetailTitle>Início</DetailTitle>
@@ -20,14 +52,14 @@ export default function Home() {
         Bem-vindo de volta! Aqui está um resumo da sua frequência.
       </DetailSubtitle>
 
-      <div className="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-2">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Horas Totais</CardTitle>
             <Clock className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">164.5</div>
+            <div className="text-2xl font-bold">{homeAnalytic.totalHours}</div>
           </CardContent>
         </Card>
 
@@ -39,22 +71,12 @@ export default function Home() {
             <Calendar className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">21/23</div>
+            <div className="text-2xl font-bold">
+              {homeAnalytic.monthDays.present}/{homeAnalytic.monthDays.days}
+            </div>
             <p className="text-xs text-muted-foreground">
-              91.3% de taxa de presença
+              {homeAnalytic.monthDays.percentage}% de taxa de presença
             </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Membros da empresa
-            </CardTitle>
-            <Users className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">12</div>
           </CardContent>
         </Card>
       </div>
@@ -69,23 +91,23 @@ export default function Home() {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {[...Array(5)].map((_, i) => (
+              {homeAnalytic.lastRecords.map((record, i) => (
                 <div key={i} className="flex items-center space-x-4">
                   <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-100">
-                    {i % 2 === 0 ? (
-                      <Clock className="h-5 w-5 text-gray-500" />
+                    {["ENTRY", "BREAK_END"].includes(record.type) ? (
+                      <BriefcaseBusiness className="h-5 w-5 text-gray-500" />
+                    ) : ["BREAK_START"].includes(record.type) ? (
+                      <UtensilsCrossed className="h-5 w-5 text-gray-500" />
                     ) : (
-                      <MapPin className="h-5 w-5 text-gray-500" />
+                      <LogOut className="h-5 w-5 text-gray-500" />
                     )}
                   </div>
                   <div>
-                    <p className="text-sm font-medium">
-                      {i % 2 === 0 ? "Entrada registrada" : "Saída registrada"}
+                    <p className="text-sm font-medium uppercase">
+                      {TIME_RECORD_TYPE_LABELS[record.type]}
                     </p>
                     <p className="text-xs text-gray-500">
-                      {new Date(
-                        Date.now() - i * 24 * 60 * 60 * 1000
-                      ).toLocaleString()}
+                      {format(new Date(record.date), "dd/MM/yyyy, hh:mm:ss a")}
                     </p>
                   </div>
                 </div>
@@ -103,36 +125,23 @@ export default function Home() {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {[...Array(5)].map((_, i) => {
-                const date = new Date();
-                date.setDate(date.getDate() + i + 1);
+              {homeAnalytic.nextDays.map((day, i) => {
                 return (
                   <div key={i} className="flex items-center justify-between">
                     <div className="flex items-center space-x-4">
                       <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-100">
                         <span className="text-sm font-medium">
-                          {date.getDate()}
+                          {format(day.date, "dd")}
                         </span>
                       </div>
                       <div>
-                        <p className="text-sm font-medium">
-                          {date.toLocaleDateString(undefined, {
-                            weekday: "long",
-                          })}
+                        <p className="text-sm font-medium uppercase">
+                          {format(day.date, "cccc", { locale: ptBR })}
                         </p>
                         <p className="text-xs text-gray-500">
-                          {i % 5 === 4 ? "Folga" : "9:00 - 18:00"}
+                          {!day.isWorker ? "Folga" : day.hours}
                         </p>
                       </div>
-                    </div>
-                    <div className="text-xs font-medium text-gray-500">
-                      {i % 5 === 4
-                        ? "Fim de Semana"
-                        : i % 3 === 0
-                        ? "Escritório Principal"
-                        : i % 3 === 1
-                        ? "Filial"
-                        : "Remoto"}
                     </div>
                   </div>
                 );

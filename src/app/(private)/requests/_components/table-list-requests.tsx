@@ -21,8 +21,10 @@ export function TableListRequests() {
       total={0}
       pagination={pagination}
       setPagination={setPagination}
-      onClickRow={(row) => router.push(`/clientes/${row.id}`)}
       onReload={() => {}}
+      onAdd={() => {
+        router.push("/requests/create");
+      }}
       isLoading={false}
     />
   );

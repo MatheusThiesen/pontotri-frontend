@@ -1,30 +1,16 @@
 "use client";
 
 import { Badge } from "@/components/ui/badge";
-import { User, UserRole } from "@/lib/hooks/use-fetch-users";
+
+import {
+  User,
+  USER_ROLE_COLORS,
+  USER_ROLE_LABELS,
+  UserRole,
+} from "@/lib/hooks/use-fetch-users";
 import { ColumnDef } from "@tanstack/react-table";
 import { format } from "date-fns";
 import { Building, Calendar, Clock, Mail } from "lucide-react";
-
-const getRoleLabel = (role: UserRole): string => {
-  const labels: Record<UserRole, string> = {
-    [UserRole.EMPLOYEE]: "Colaborador",
-    [UserRole.ADMIN]: "Administrador",
-    [UserRole.OWNER]: "Proprietário",
-    [UserRole.MANAGER]: "Gerente",
-  };
-  return labels[role];
-};
-
-const getRoleColor = (role: UserRole): string => {
-  const colors: Record<UserRole, string> = {
-    [UserRole.EMPLOYEE]: "bg-blue-50 text-blue-700 border-blue-200",
-    [UserRole.ADMIN]: "bg-purple-50 text-purple-700 border-purple-200",
-    [UserRole.MANAGER]: "bg-teal-50 text-teal-700 border-teal-200",
-    [UserRole.OWNER]: "bg-amber-50 text-amber-700 border-amber-200",
-  };
-  return colors[role];
-};
 
 export const columns: ColumnDef<User>[] = [
   {
@@ -46,8 +32,8 @@ export const columns: ColumnDef<User>[] = [
     cell: ({ row }) => {
       const role = row.getValue("role") as UserRole;
       return (
-        <Badge variant="outline" className={getRoleColor(role)}>
-          {getRoleLabel(role)}
+        <Badge variant="outline" className={USER_ROLE_COLORS[role]}>
+          {USER_ROLE_LABELS[role]}
         </Badge>
       );
     },

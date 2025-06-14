@@ -9,10 +9,10 @@ import {
 
 import { cn } from "@/lib/utils";
 import { optimizeAndConvertToBase64 } from "@/lib/utils/image";
-import { ImageIcon, Trash2, Upload } from "lucide-react";
+import { Trash2, Upload } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Control } from "react-hook-form";
-import { Dropzone } from "../Dropzone";
+import { Dropzone } from "../dropzone";
 import { Button } from "../ui/button";
 
 interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -100,17 +100,20 @@ export function InputFileForm({ control, name, label, description }: Props) {
                 <div className="relative">
                   <Dropzone
                     className={cn(
-                      "h-32 text-sm transition-all duration-200",
+                      "h-32 text-sm transition-all duration-200 cursor-pointer",
                       "border-2 border-dashed border-border bg-background hover:border-primary/50 hover:bg-primary/5",
                       "flex flex-col items-center justify-center gap-2"
                     )}
                     accept={{ "image/*": [] }}
                     onFileUploaded={handleFileUpload}
                   >
-                    <ImageIcon className="h-8 w-8 text-muted-foreground" />
+                    <Upload className="h-8 w-8 text-muted-foreground" />
                     <div className="text-center">
                       <p className="text-sm font-medium text-muted-foreground">
-                        Arraste uma imagem ou clique para selecionar
+                        <span className="font-semibold">
+                          Clique para enviar
+                        </span>{" "}
+                        ou arraste o arquivo
                       </p>
                       <p className="text-xs text-muted-foreground/70">
                         PNG, JPG ou JPEG até 5MB

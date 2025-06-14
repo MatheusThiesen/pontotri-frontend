@@ -1,6 +1,7 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
+import { Building } from "lucide-react";
 import { toast } from "sonner";
 import { z } from "zod";
 import { DepartmentActions } from "./department-actions";
@@ -16,7 +17,12 @@ export const columns: ColumnDef<Client>[] = [
   {
     accessorKey: "name",
     header: "Nome",
-    cell: ({ row }) => <div className="w-[200px]">{row.getValue("name")}</div>,
+    cell: ({ row }) => (
+      <div className="flex items-center gap-2 text-muted-foreground">
+        <Building className="h-3.5 w-3.5" />
+        <span>{row.original.name}</span>
+      </div>
+    ),
   },
 
   {

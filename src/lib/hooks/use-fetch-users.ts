@@ -10,6 +10,27 @@ export enum UserRole {
   EMPLOYEE = "EMPLOYEE",
 }
 
+export const USER_ROLE_LABELS: Record<UserRole, string> = {
+  [UserRole.EMPLOYEE]: "Colaborador",
+  [UserRole.ADMIN]: "Administrador",
+  [UserRole.OWNER]: "Proprietário",
+  [UserRole.MANAGER]: "Gerente",
+};
+
+export const USER_ROLE_COLORS: Record<UserRole, string> = {
+  [UserRole.EMPLOYEE]: "bg-blue-50 text-blue-700 border-blue-200",
+  [UserRole.ADMIN]: "bg-purple-50 text-purple-700 border-purple-200",
+  [UserRole.MANAGER]: "bg-teal-50 text-teal-700 border-teal-200",
+  [UserRole.OWNER]: "bg-amber-50 text-amber-700 border-amber-200",
+};
+
+export const USER_ROLE_OPTIONS = Object.entries(USER_ROLE_LABELS).map(
+  ([value, label]) => ({
+    value,
+    label,
+  })
+);
+
 export interface User {
   id: string;
   name: string;

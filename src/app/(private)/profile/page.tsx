@@ -27,26 +27,38 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAuth } from "@/lib/contexts/AuthProvider";
-import { Camera, Edit, Key, User } from "lucide-react";
+import {
+  TIME_RECORD_TYPE_LABELS,
+  useFetchRecords,
+} from "@/lib/hooks/use-fetch-records";
+import { USER_ROLE_LABELS } from "@/lib/hooks/use-fetch-users";
+import { Edit, Key, User } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 
 export default function ProfilePage() {
   const { me } = useAuth();
+  const { data: fetchRecords } = useFetchRecords({
+    page: 1,
+    pagesize: 5,
+    filters: { userId: me.id },
+  });
   const [isEditProfileOpen, setIsEditProfileOpen] = useState(false);
   const [isChangePasswordOpen, setIsChangePasswordOpen] = useState(false);
 
   const user = {
     name: me.name ?? "",
     email: me.email ?? "",
-    role: me.role ?? "",
-    department: "Engineering",
-    employeeId: "EMP-12345",
-    joinDate: "2022-01-15",
-    phone: "+1 (555) 123-4567",
-    location: "Main Office",
-    enterprise: "Petry Tintas",
-    manager: "Jane Smith",
+    role: USER_ROLE_LABELS[me.role] ?? "",
+    department: me.department?.name ?? "-",
+    profileImage: me?.profileImage,
+    enterprise: me.company?.name,
+    workSchedule: me.workSchedule?.name,
+
+    // joinDate: "2022-01-15",
+    // phone: "+1 (555) 123-4567",
+    // location: "Main Office",
+    // manager: "Jane Smith",
   };
 
   return (
@@ -63,8 +75,9 @@ export default function ProfilePage() {
             <div className="relative">
               <Avatar className="h-24 w-24">
                 <AvatarImage
-                  src="/placeholder.svg?height=96&width=96"
+                  src={user.profileImage}
                   alt={user.name}
+                  className="object-cover"
                 />
                 <AvatarFallback className="text-2xl">
                   {user?.name
@@ -73,13 +86,6 @@ export default function ProfilePage() {
                     .join("")}
                 </AvatarFallback>
               </Avatar>
-              <Button
-                size="icon"
-                variant="secondary"
-                className="absolute -bottom-2 -right-2 h-8 w-8 rounded-full"
-              >
-                <Camera className="h-4 w-4" />
-              </Button>
             </div>
             <CardTitle className="mt-4 text-xl">{user.name}</CardTitle>
             <CardDescription>{user.role}</CardDescription>
@@ -114,7 +120,7 @@ export default function ProfilePage() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <Tabs defaultValue="personal">
+            <Tabs defaultValue="work">
               <TabsList className="mb-4 grid w-full grid-cols-2">
                 <TabsTrigger value="personal">Dados Pessoais</TabsTrigger>
                 <TabsTrigger value="work">
@@ -137,22 +143,6 @@ export default function ProfilePage() {
                     </Label>
                     <div className="mt-1 text-sm font-medium text-gray-900">
                       {user.email}
-                    </div>
-                  </div>
-                  <div>
-                    <Label className="text-xs font-medium text-gray-500">
-                      Telefone
-                    </Label>
-                    <div className="mt-1 text-sm font-medium text-gray-900">
-                      {user.phone}
-                    </div>
-                  </div>
-                  <div>
-                    <Label className="text-xs font-medium text-gray-500">
-                      Endereço
-                    </Label>
-                    <div className="mt-1 text-sm font-medium text-gray-900">
-                      {user.location}
                     </div>
                   </div>
                 </div>
@@ -185,18 +175,10 @@ export default function ProfilePage() {
                   </div>
                   <div>
                     <Label className="text-xs font-medium text-gray-500">
-                      Data de admissão
+                      Jornada
                     </Label>
                     <div className="mt-1 text-sm font-medium text-gray-900">
-                      {new Date(user.joinDate).toLocaleDateString()}
-                    </div>
-                  </div>
-                  <div>
-                    <Label className="text-xs font-medium text-gray-500">
-                      Gestor
-                    </Label>
-                    <div className="mt-1 text-sm font-medium text-gray-900">
-                      {user.manager}
+                      {user.workSchedule}
                     </div>
                   </div>
                 </div>
@@ -214,27 +196,21 @@ export default function ProfilePage() {
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            {[...Array(5)].map((_, i) => (
+            {fetchRecords?.data.map((record, i) => (
               <div key={i} className="flex items-start space-x-4">
                 <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-100">
                   <User className="h-5 w-5 text-gray-500" />
                 </div>
                 <div className="flex-1">
                   <p className="text-sm font-medium text-gray-900">
-                    {i % 2 === 0 ? "Checked in" : "Checked out"}
+                    {TIME_RECORD_TYPE_LABELS[record.type]}
                   </p>
                   <p className="text-xs text-gray-500">
-                    {new Date(
-                      Date.now() - i * 24 * 60 * 60 * 1000
-                    ).toLocaleString()}
+                    {record.createdAtToFormat}
                   </p>
                 </div>
                 <div className="text-xs text-gray-500">
-                  {i % 3 === 0
-                    ? "Main Office"
-                    : i % 3 === 1
-                    ? "Branch Office"
-                    : "Remote"}
+                  {record.location.description}
                 </div>
               </div>
             ))}
@@ -277,16 +253,6 @@ export default function ProfilePage() {
               <Input
                 id="email"
                 defaultValue={user.email}
-                className="col-span-3"
-              />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="phone" className="text-right">
-                Telefone
-              </Label>
-              <Input
-                id="phone"
-                defaultValue={user.phone}
                 className="col-span-3"
               />
             </div>
