@@ -7,7 +7,7 @@ import {
   FormMessage,
 } from "../ui/form";
 
-import { Dropzone } from "@/components/dropzone";
+import { Dropzone } from "@/components/form/dropzone";
 import { cn } from "@/lib/utils";
 import { optimizeAndConvertToBase64 } from "@/lib/utils/image";
 import { Trash2, Upload } from "lucide-react";
