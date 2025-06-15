@@ -5,7 +5,7 @@ import { parseCookies } from "nookies";
 
 export const BASE_URL =
   process.env.NODE_ENV !== "development"
-    ? "https://api.pontotri.com.br/"
+    ? process.env.API_BASE_URL
     : "http://localhost:5555/";
 
 export function setupAPIClient(
