@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev ",
     "build": "next build",
-    "start": "next start",
+    "start": "next start -p 3000",
     "lint": "next lint"
   },
   "dependencies": {
@@ -34,6 +34,7 @@
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
     "date-fns": "^4.1.0",
+    "dayjs": "^1.11.13",
     "framer-motion": "^12.10.5",
     "input-otp": "^1.4.2",
     "lucide-react": "^0.509.0",

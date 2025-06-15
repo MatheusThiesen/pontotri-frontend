@@ -15,13 +15,13 @@ import { DatePickerWithRange } from "@/components/ui/date-range-picker";
 import { useAuth } from "@/lib/contexts/AuthProvider";
 import { fetchReports } from "@/lib/hooks/use-fetch-reports";
 import { ColumnDef } from "@tanstack/react-table";
-import { User } from "lucide-react";
+import { Download, User } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { DateRange } from "react-day-picker";
-import { reports } from "../page";
 
 import { TIME_RECORD_TYPE_LABELS } from "@/lib/hooks/use-fetch-records";
+import { reports } from "@/lib/hooks/use-reports";
 import { cn } from "@/lib/utils";
 import dayjs from "dayjs";
 import "dayjs/locale/pt-br";
@@ -139,6 +139,53 @@ export default function GenerateReport() {
 
     setColumnsTable(columns);
     setDataTable(data);
+  };
+
+  const handleExportExcel = () => {
+    if (!reportData || !dataTable.length) return;
+
+    // Criar cabeçalho do Excel
+    const headers = [
+      "Data",
+      ...reportData.reportTimeMirror.recordColumns.map(
+        (column: string) =>
+          TIME_RECORD_TYPE_LABELS[
+            column as keyof typeof TIME_RECORD_TYPE_LABELS
+          ]
+      ),
+    ];
+
+    // Criar linhas do Excel
+    const rows = dataTable.map((row) => [
+      row.date,
+      ...reportData.reportTimeMirror.recordColumns.map(
+        (column: string) => row[column] || "-"
+      ),
+    ]);
+
+    // Criar conteúdo do CSV
+    const csvContent = [
+      headers.join(","),
+      ...rows.map((row) => row.join(",")),
+    ].join("\n");
+
+    // Criar blob e link para download
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
+    const url = URL.createObjectURL(blob);
+
+    link.setAttribute("href", url);
+    link.setAttribute(
+      "download",
+      `relatorio-${reportData.reportTimeMirror.user.name}-${dayjs(
+        date?.from
+      ).format("DD-MM-YYYY")}-${dayjs(date?.to).format("DD-MM-YYYY")}.csv`
+    );
+    link.style.visibility = "hidden";
+
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   if (!selectedReport) {
@@ -291,6 +338,16 @@ export default function GenerateReport() {
                   </div>
 
                   <div className="border-t pt-4">
+                    <div className="flex justify-end mb-4">
+                      <Button
+                        onClick={handleExportExcel}
+                        variant="outline"
+                        className="gap-2"
+                      >
+                        <Download className="w-4 h-4" />
+                        Exportar Excel
+                      </Button>
+                    </div>
                     <DataTable
                       columns={columnsTable}
                       data={dataTable}
