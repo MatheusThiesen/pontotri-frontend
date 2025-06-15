@@ -5,7 +5,7 @@ import { parseCookies } from "nookies";
 
 export const BASE_URL =
   process.env.NODE_ENV !== "development"
-    ? "backend-pontotri.up.railway.app"
+    ? "https://backend-pontotri.up.railway.app/"
     : "http://localhost:5555/";
 
 export function setupAPIClient(
