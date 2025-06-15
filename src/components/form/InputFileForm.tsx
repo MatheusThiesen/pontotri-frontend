@@ -7,12 +7,12 @@ import {
   FormMessage,
 } from "../ui/form";
 
+import { Dropzone } from "@/components/dropzone";
 import { cn } from "@/lib/utils";
 import { optimizeAndConvertToBase64 } from "@/lib/utils/image";
 import { Trash2, Upload } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Control } from "react-hook-form";
-import { Dropzone } from "../dropzone";
 import { Button } from "../ui/button";
 
 interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
