@@ -25,6 +25,7 @@ import { reports } from "@/lib/hooks/use-reports";
 import { cn } from "@/lib/utils";
 import dayjs from "dayjs";
 import "dayjs/locale/pt-br";
+import { SelectUser } from "../_components/select-user";
 
 // TODO: Substituir por dados reais da API
 const users = [
@@ -34,7 +35,7 @@ const users = [
   { id: "4", name: "Ana Costa", icon: User },
 ];
 
-interface ComboboxDataProps {
+export interface ComboboxDataProps {
   value: string;
   label: string;
   icon?: React.ElementType;
@@ -243,12 +244,7 @@ export default function GenerateReport() {
 
                 <div className="flex items-center gap-2">
                   {["ADMIN", "OWNER", "MANAGER"].includes(me.role) && (
-                    <Combobox
-                      label="Usuário"
-                      data={userOptions}
-                      onChange={setSelectedUser}
-                      className="w-56"
-                    />
+                    <SelectUser onChange={setSelectedUser} />
                   )}
 
                   <div className="space-y-2">

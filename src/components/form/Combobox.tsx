@@ -31,7 +31,7 @@ interface ComboboxProps {
   onChange?: (e: ComboboxDataProps | null) => void;
 }
 
-interface ComboboxDataProps {
+export interface ComboboxDataProps {
   value: string;
   label: string;
 }

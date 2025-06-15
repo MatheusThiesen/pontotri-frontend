@@ -72,7 +72,7 @@ export const groupedMenusItems: GroupedMenuItemProps[] = [
         icon: BarChart3,
         label: "Relatórios",
         href: "/reports",
-        isOnlySideNavigation: true,
+
         roles: ["ADMIN", "OWNER", "MANAGER", "EMPLOYEE"],
       },
     ],
