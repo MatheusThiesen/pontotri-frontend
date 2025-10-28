@@ -27,25 +27,11 @@ import dayjs from "dayjs";
 import "dayjs/locale/pt-br";
 import { SelectUser } from "../_components/select-user";
 
-// TODO: Substituir por dados reais da API
-const users = [
-  { id: "1", name: "João Silva", icon: User },
-  { id: "2", name: "Maria Santos", icon: User },
-  { id: "3", name: "Pedro Oliveira", icon: User },
-  { id: "4", name: "Ana Costa", icon: User },
-];
-
 export interface ComboboxDataProps {
   value: string;
   label: string;
   icon?: React.ElementType;
 }
-
-const userOptions: ComboboxDataProps[] = users.map((user) => ({
-  value: user.id,
-  label: user.name,
-  icon: user.icon,
-}));
 
 const reportOptions: ComboboxDataProps[] = reports.map((report) => ({
   value: report.key.toString(),
