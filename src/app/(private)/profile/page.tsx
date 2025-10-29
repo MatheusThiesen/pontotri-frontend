@@ -123,9 +123,7 @@ export default function ProfilePage() {
             <Tabs defaultValue="work">
               <TabsList className="mb-4 grid w-full grid-cols-2">
                 <TabsTrigger value="personal">Dados Pessoais</TabsTrigger>
-                <TabsTrigger value="work">
-                  Informações Profissionais
-                </TabsTrigger>
+                <TabsTrigger value="work">Profissionais</TabsTrigger>
               </TabsList>
               <TabsContent value="personal" className="space-y-4">
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
