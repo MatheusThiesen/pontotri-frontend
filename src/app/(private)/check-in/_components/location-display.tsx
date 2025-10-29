@@ -1,9 +1,10 @@
 "use client";
 
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { AlertCircle, MapPin } from "lucide-react";
-import { useEffect, useState } from "react";
+import { AlertCircle, MapPin, RefreshCcw } from "lucide-react";
+import { useCallback, useEffect, useState } from "react";
 
 export function LocationDisplay() {
   const [location, setLocation] = useState<{
@@ -13,9 +14,12 @@ export function LocationDisplay() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
+  const getLocation = useCallback(() => {
+    setLoading(true);
+    setError(null);
+
     if (!navigator.geolocation) {
-      setError("Geolocalização não é suportada pelo seu navegador");
+      setError("Geolocalização não é suportada pelo seu navegador.");
       setLoading(false);
       return;
     }
@@ -26,32 +30,37 @@ export function LocationDisplay() {
       maximumAge: 0,
     };
 
-    const successHandler = (position: GeolocationPosition) => {
-      setLocation({
-        latitude: position.coords.latitude,
-        longitude: position.coords.longitude,
-      });
-      setLoading(false);
-    };
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        setLocation({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+        });
+        setLoading(false);
+      },
+      (err) => {
+        console.error("Erro ao obter localização:", err);
 
-    const errorHandler = (err: GeolocationPositionError) => {
-      console.error("Erro ao obter localização:", err);
-      setError(
-        "Não foi possível obter sua localização. Verifique as permissões."
-      );
-      setLoading(false);
-    };
+        let message = "Não foi possível obter sua localização.";
+        if (err.code === err.PERMISSION_DENIED) {
+          message =
+            "Permissão de localização negada. Clique em 'Tentar novamente' para autorizar.";
+        } else if (err.code === err.POSITION_UNAVAILABLE) {
+          message = "Informações de localização indisponíveis.";
+        } else if (err.code === err.TIMEOUT) {
+          message = "Tempo esgotado ao tentar obter localização.";
+        }
 
-    const watchId = navigator.geolocation.watchPosition(
-      successHandler,
-      errorHandler,
+        setError(message);
+        setLoading(false);
+      },
       geoOptions
     );
-
-    return () => {
-      navigator.geolocation.clearWatch(watchId);
-    };
   }, []);
+
+  useEffect(() => {
+    getLocation();
+  }, [getLocation]);
 
   return (
     <div className="mt-4 p-3 bg-gray-50 rounded-lg border border-gray-200">
@@ -67,8 +76,21 @@ export function LocationDisplay() {
         </div>
       ) : error ? (
         <Alert variant="destructive" className="py-2">
-          <AlertCircle className="h-4 w-4" />
-          <AlertDescription className="text-xs">{error}</AlertDescription>
+          <div className="flex items-center justify-between w-full">
+            <div className="flex items-center gap-2">
+              <AlertCircle className="h-4 w-4" />
+              <AlertDescription className="text-xs">{error}</AlertDescription>
+            </div>
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={getLocation}
+              className="text-xs ml-2"
+            >
+              <RefreshCcw className="h-3 w-3 mr-1" />
+              Tentar novamente
+            </Button>
+          </div>
         </Alert>
       ) : location ? (
         <div className="grid grid-cols-2 gap-2 text-sm">
